@@ -7,4 +7,14 @@
     android:background="@color/deep_ocean_blue"
     tools:context=".GameActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey"
+        android:text="A"/>
+
+    <LinearLayout
+        android:id="@+id/target_battleship_grid"
+        style="@style/Grid" />
+
 </LinearLayout>
