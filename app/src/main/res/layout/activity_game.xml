@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,10 +11,97 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/light_grey"
+        android:text="Placez vos navires"
+        android:layout_centerHorizontal="true"/>
+
+    <GridLayout
+        android:id="@+id/MyGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/PlaceShips"
+        android:layout_centerInParent="true"
+        android:paddingBottom="70dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="70dp"
+        android:columnCount="10"
+        android:rowCount="10">
+
+    </GridLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PlaceShips"
+        android:layout_alignParentBottom="true"
+        android:columnCount="5"
+        android:rowCount="1">
+
+        <ImageView
+            android:id="@+id/porte_avion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="a1"
+            android:scaleType="fitXY"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:src="@drawable/bateau"/>
+
+        <ImageView
+            android:id="@+id/croiseur"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="b1"
+            android:scaleType="fitXY"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:src="@drawable/bateau"/>
+
+        <ImageView
+            android:id="@+id/contre_torpilleur1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="c1"
+            android:scaleType="fitXY"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:src="@drawable/bateau"/>
+
+        <ImageView
+            android:id="@+id/contre_torpilleur2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="d1"
+            android:scaleType="fitXY"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:src="@drawable/bateau"/>
+
+        <ImageView
+            android:id="@+id/torpilleur"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="e1"
+            android:scaleType="fitXY"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:src="@drawable/bateau"/>
+
+    </GridLayout>
+
+    <!-- <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey"
         android:text="A"/>
 
     <LinearLayout
         android:id="@+id/target_battleship_grid"
-        style="@style/Grid" />
+        style="@style/Grid" /> -->
 
-</LinearLayout>
+</RelativeLayout>
