@@ -3,8 +3,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    tools:context=".GameActivity"
     android:background="@color/deep_ocean_blue"
-    tools:context=".GameActivity">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_grey"
+            android:text="A vous de jouer"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/wargate_normal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:id="@+id/MyGrid"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:columnCount="10"
+            android:rowCount="10"
+            android:stretchMode="columnWidth">
+
+        </GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/startGameBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Abandonner"
+            android:fontFamily="@font/wargate_normal"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/light_grey"
+            android:textColor="@color/red_brown"
+            android:onClick="clickAbandon"/>
+
+    </LinearLayout>
 
 </LinearLayout>

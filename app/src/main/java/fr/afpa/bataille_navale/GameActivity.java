@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -11,12 +12,14 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        launchGame();
     }
 
-    public void launchGame() {
-        Intent thisIntent = getIntent();
-
+    /**
+     * Set intent to go back to MainActivity
+     */
+    public void clickAbandon(View v) {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
     }
 }

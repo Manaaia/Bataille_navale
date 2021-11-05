@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/deep_ocean_blue"
+    tools:context=".PlacementActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:text="Placez vos navires"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:fontFamily="@font/wargate_normal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:text="Appuyez sur un bateau et faîte le glisser jusqu'à l'emplacement désiré puis relachez-le. Une fois fait, vous pourrez modifier son orientation en cliquant dessus."
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/MyGrid"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:columnCount="10"
+                android:rowCount="10"
+                android:stretchMode="columnWidth">
+
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:id="@+id/StoreShips"
+                android:columnCount="5"
+                android:rowCount="1"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:background="@color/white"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/porte_avion"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="a1"
+                    android:layout_columnWeight="1"
+                    android:src="@drawable/porte_avion"/>
+
+                <ImageView
+                    android:id="@+id/croiseur"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="b1"
+                    android:layout_columnWeight="1"
+                    android:src="@drawable/croiseur"/>
+
+                <ImageView
+                    android:id="@+id/contre_torpilleur1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="c1"
+                    android:layout_columnWeight="1"
+                    android:src="@drawable/contre_torpilleur"/>
+
+                <ImageView
+                    android:id="@+id/contre_torpilleur2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="d1"
+                    android:layout_columnWeight="1"
+                    android:src="@drawable/contre_torpilleur"/>
+
+                <ImageView
+                    android:id="@+id/torpilleur"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="e1"
+                    android:layout_columnWeight="1"
+                    android:src="@drawable/torpilleur"/>
+
+            </GridLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <Button
+                android:id="@+id/startGameBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Lancer la partie"
+                android:fontFamily="@font/wargate_normal"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/light_grey"
+                android:textColor="@color/red_brown"
+                android:visibility="gone"
+                android:onClick="clickLaunchGame"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Reset"
+                android:fontFamily="@font/wargate_normal"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/light_grey"
+                android:textColor="@color/red_brown"
+                android:visibility="visible"
+                android:onClick="clickResetPlacement"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
