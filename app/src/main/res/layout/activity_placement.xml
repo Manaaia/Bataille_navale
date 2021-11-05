@@ -42,71 +42,94 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <GridLayout
-                android:id="@+id/MyGrid"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingEnd="20dp"
-                android:paddingStart="20dp"
-                android:paddingTop="20dp"
-                android:columnCount="10"
-                android:rowCount="10"
-                android:stretchMode="columnWidth">
 
-            </GridLayout>
+            <!-- <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/rvNumbers"
+                 android:layout_width="match_parent"
+                 android:layout_height="400dp"
+                 android:padding="20dp"/>-->
+
+
+
+             <GridLayout
+                 android:id="@+id/MyGrid"
+                 android:layout_width="match_parent"
+                 android:layout_height="400dp"
+                 android:orientation="vertical"
+                 android:paddingBottom="20dp"
+                 android:paddingEnd="20dp"
+                 android:paddingStart="20dp"
+                 android:paddingTop="20dp"
+                 android:columnCount="10"
+                 android:rowCount="10">
+
+             </GridLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:id="@+id/StoreShips"
-                android:columnCount="5"
-                android:rowCount="1"
+                android:columnCount="6"
+                android:rowCount="6"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:background="@color/white"
                 android:visibility="visible">
 
                 <ImageView
-                    android:id="@+id/porte_avion"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:contentDescription="a1"
-                    android:layout_columnWeight="1"
-                    android:src="@drawable/porte_avion"/>
-
-                <ImageView
                     android:id="@+id/croiseur"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:contentDescription="b1"
                     android:layout_columnWeight="1"
-                    android:src="@drawable/croiseur"/>
-
-                <ImageView
-                    android:id="@+id/contre_torpilleur1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:contentDescription="c1"
-                    android:layout_columnWeight="1"
-                    android:src="@drawable/contre_torpilleur"/>
-
-                <ImageView
-                    android:id="@+id/contre_torpilleur2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:contentDescription="d1"
-                    android:layout_columnWeight="1"
-                    android:src="@drawable/contre_torpilleur"/>
+                    android:layout_rowWeight="1"
+                    android:src="@drawable/croiseur"
+                    android:layout_columnSpan="1"
+                    android:layout_rowSpan="3"/>
 
                 <ImageView
                     android:id="@+id/torpilleur"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:contentDescription="e1"
                     android:layout_columnWeight="1"
-                    android:src="@drawable/torpilleur"/>
+                    android:layout_rowWeight="1"
+                    android:src="@drawable/torpilleur"
+                    android:layout_columnSpan="1"
+                    android:layout_rowSpan="4"/>
+
+                <ImageView
+                    android:id="@+id/porte_avion"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:contentDescription="a1"
+                    android:src="@drawable/porte_avion"
+                    android:layout_columnSpan="2"
+                    android:layout_rowSpan="6"/>
+
+                <ImageView
+                    android:id="@+id/contre_torpilleur1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:contentDescription="c1"
+                    android:src="@drawable/contre_torpilleur"
+                    android:layout_columnSpan="1"
+                    android:layout_rowSpan="5"/>
+
+                <ImageView
+                    android:id="@+id/contre_torpilleur2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:contentDescription="d1"
+                    android:src="@drawable/contre_torpilleur"
+                    android:layout_columnSpan="1"
+                    android:layout_rowSpan="5"/>
 
             </GridLayout>
         </LinearLayout>

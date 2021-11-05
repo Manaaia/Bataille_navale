@@ -2,6 +2,8 @@ package fr.afpa.bataille_navale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -31,7 +33,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class PlacementActivity extends AppCompatActivity {
+public class PlacementActivity extends AppCompatActivity  {
+
     private Boolean mDroppedIn = null;
     private View porte_avion;
     private View croiseur;
@@ -40,6 +43,7 @@ public class PlacementActivity extends AppCompatActivity {
     private View torpilleur;
     private Button button;
     private GridLayout gridStore;
+    private MyRecyclerViewAdapter adapter;
 
 
     @Override
@@ -75,15 +79,15 @@ public class PlacementActivity extends AppCompatActivity {
         layout.setRowCount(BoardSize.ROWS);
         layout.setColumnCount(BoardSize.COLUMNS);
 
-        for(int i = 0; i < 9; i++) {
+        for(int i = 1; i < BoardSize.ROWS; i++) {
             GridLayout.Spec rowSpec = GridLayout.spec(i, 1, 1);
-            for(int j = 0; j < 9; j++) {
+            for(int j = 1; j < BoardSize.COLUMNS; j++) {
                 GridLayout.Spec colSpec = GridLayout.spec(j, 1, 1);
                 LinearLayout linearLayout = new LinearLayout(new ContextThemeWrapper(this,R.style.Grid));
                 linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
-                //linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linearLayout.setId(R.id.row + i + R.id.col + j);
-                //linearLayout.setGravity(Gravity.FILL_HORIZONTAL);
+                linearLayout.setGravity(Gravity.FILL_HORIZONTAL);
                 linearLayout.setOnDragListener(new MyDragListener());
                 ImageView imageView = new ImageView(this);
                 imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -98,6 +102,21 @@ public class PlacementActivity extends AppCompatActivity {
                 layout.addView(linearLayout, myGLP);
             }
         }
+
+        // data to populate the RecyclerView with
+        /*for(int i = 1; i <BoardSize.ROWS; i++) {
+            for(int j = 1; j < BoardSize.COLUMNS; j++) {
+
+            }
+        }*/
+       /*f String[] data = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48"};
+
+        // set up the RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.rvNumbers);
+        int numberOfColumns = 10;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        adapter = new MyRecyclerViewAdapter(this, data);
+        recyclerView.setAdapter(adapter);*/
 
     }
 
