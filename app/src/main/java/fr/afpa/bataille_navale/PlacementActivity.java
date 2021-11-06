@@ -33,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class PlacementActivity extends AppCompatActivity  {
 
     private Boolean mDroppedIn = null;
@@ -44,6 +46,7 @@ public class PlacementActivity extends AppCompatActivity  {
     private Button button;
     private GridLayout gridStore;
     private MyRecyclerViewAdapter adapter;
+    private GridLayout layout;
 
 
     @Override
@@ -75,7 +78,7 @@ public class PlacementActivity extends AppCompatActivity  {
         /**
          * Create the board programmatically in the GridLayout view
          */
-        GridLayout layout = (GridLayout) findViewById(R.id.MyGrid);
+        layout = (GridLayout) findViewById(R.id.MyGrid);
         layout.setRowCount(BoardSize.ROWS);
         layout.setColumnCount(BoardSize.COLUMNS);
 
@@ -87,6 +90,7 @@ public class PlacementActivity extends AppCompatActivity  {
                 linearLayout.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linearLayout.setId(R.id.row + i + R.id.col + j);
+                linearLayout.setTag("row"+ i + "col" + j);
                 linearLayout.setGravity(Gravity.FILL_HORIZONTAL);
                 linearLayout.setOnDragListener(new MyDragListener());
                 ImageView imageView = new ImageView(this);
@@ -100,6 +104,8 @@ public class PlacementActivity extends AppCompatActivity  {
                 myGLP.width = 0;
                 myGLP.height = 0;
                 layout.addView(linearLayout, myGLP);
+
+                Log.i("idMain : ", String.valueOf(linearLayout.getTag()));
             }
         }
 
@@ -201,23 +207,75 @@ public class PlacementActivity extends AppCompatActivity  {
                     /**
                      * Reassign view to view group
                      */
-                    View view = (View) event.getLocalState();
+                    ImageView view = (ImageView) event.getLocalState();
                     ViewGroup owner = (ViewGroup) view.getParent();
                     owner.removeView(view);
                     LinearLayout container = (LinearLayout) v;
                     container.addView(view);
                     view.setVisibility(View.VISIBLE);
+                    //GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(view.getLayoutParams());
+                    //container.setLayoutParams(layoutParams);
+
+                    /**
+                     * Split image in several images according to number of spans
+                     */
+                    ArrayList<Bitmap> chunkedImages = Crop.defineSplit(view);
+
+                    /**
+                     * Get My grid cases corresponding to size of chunkedImages list for display
+                     */
+                    int chunkedImagesSize = chunkedImages.size();
+                    Log.i("idMain : ", String.valueOf(chunkedImagesSize));
+                    Log.i("idMain : ", String.valueOf(chunkedImagesSize/2));
+                    for(int i = 0; i < chunkedImagesSize/2; i++) {
+                        Object objTagMain = container.getTag();
+                        String tagMain = String.valueOf(objTagMain);
+                        Log.i("id1moitie : ", tagMain);
+                        char cMainI = tagMain.charAt(7);
+                        int MainI = Character.getNumericValue(cMainI);
+                        int neighbourTileI = MainI - i;
+                        Log.i("idNeighbour : ", String.valueOf(neighbourTileI));
+                        String sNeighbourTileI = String.valueOf(neighbourTileI);
+                        String tagNeighbour = tagMain.substring(0,7) + sNeighbourTileI;
+                        Log.i("idNeighbour : ", tagNeighbour);
+                        LinearLayout neighbourContainer = (LinearLayout) layout.findViewWithTag(tagNeighbour);
+                        ImageView oldView = (ImageView) view;
+                        ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
+                        neighbourView.setId(oldView.getId());
+                        neighbourView.setOnClickListener(myListener);
+                        neighbourView.setImageBitmap(chunkedImages.get(chunkedImagesSize/2 - i));
+                    }
+
+                    for(int i = (chunkedImagesSize/2)-1; i < chunkedImagesSize-1; i++) {
+                        Object objTagMain = container.getTag();
+                        String tagMain = String.valueOf(objTagMain);
+                        Log.i("id2moitiee : ", tagMain);
+                        char cMainI = tagMain.charAt(7);
+                        int MainI = Character.getNumericValue(cMainI);
+                        int neighbourTileI = MainI + i;
+                        Log.i("idNeighbour : ", String.valueOf(neighbourTileI));
+                        String sNeighbourTileI = String.valueOf(neighbourTileI);
+                        String tagNeighbour = tagMain.substring(0,7) + sNeighbourTileI;
+                        Log.i("idNeighbour : ", tagNeighbour);
+                        LinearLayout neighbourContainer = (LinearLayout) layout.findViewWithTag(tagNeighbour);
+                        ImageView oldView = (ImageView) view;
+                        ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
+                        neighbourView.setId(oldView.getId());
+                        neighbourView.setOnClickListener(myListener);
+                        neighbourView.setImageBitmap(chunkedImages.get(chunkedImagesSize/2 + i-1));
+                    }
 
                     /**
                      * Copy all dragged image data into target image data
                      * Attach OnClickListener and Rotation method to target image data
                      */
-                    ImageView oldView = (ImageView) view;
+                    /*ImageView oldView = (ImageView) view;
                     ImageView newView = (ImageView) container.getChildAt(0);
                     newView.setId(oldView.getId());
-                    newView.setContentDescription(oldView.getContentDescription());
+                    //newView.setContentDescription(oldView.getContentDescription());
                     newView.setOnClickListener(myListener);
-                    newView.setImageBitmap(((BitmapDrawable) oldView.getDrawable()).getBitmap());
+                    //newView.setImageBitmap(((BitmapDrawable) oldView.getDrawable()).getBitmap());
+                    newView.setImageBitmap(chunkedImages.get(chunkedImagesSize/2));*/
 
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:

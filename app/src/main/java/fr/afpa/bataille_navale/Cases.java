@@ -1,3 +1,5 @@
+package fr.afpa.bataille_navale;
+
 import android.content.Context;
 import android.widget.ImageView;
 
