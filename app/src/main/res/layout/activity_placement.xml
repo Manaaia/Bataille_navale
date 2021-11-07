@@ -83,7 +83,7 @@
                     android:contentDescription="b1"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
-                    android:src="@drawable/croiseur"
+                    android:src="@drawable/t_croiseur"
                     android:layout_columnSpan="1"
                     android:layout_rowSpan="3"/>
 
@@ -94,7 +94,7 @@
                     android:contentDescription="e1"
                     android:layout_columnWeight="1"
                     android:layout_rowWeight="1"
-                    android:src="@drawable/torpilleur"
+                    android:src="@drawable/t_torpilleur"
                     android:layout_columnSpan="1"
                     android:layout_rowSpan="4"/>
 
@@ -105,7 +105,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:contentDescription="a1"
-                    android:src="@drawable/porte_avion"
+                    android:src="@drawable/t_porte_avion"
                     android:layout_columnSpan="1"
                     android:layout_rowSpan="6"/>
 
@@ -116,7 +116,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:contentDescription="c1"
-                    android:src="@drawable/contre_torpilleur"
+                    android:src="@drawable/t_contre_torpilleur"
                     android:layout_columnSpan="1"
                     android:layout_rowSpan="5"/>
 
@@ -127,7 +127,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:contentDescription="d1"
-                    android:src="@drawable/contre_torpilleur"
+                    android:src="@drawable/t_contre_torpilleur"
                     android:layout_columnSpan="1"
                     android:layout_rowSpan="5"/>
 
