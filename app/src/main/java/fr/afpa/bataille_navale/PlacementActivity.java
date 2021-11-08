@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlacementActivity extends AppCompatActivity  {
@@ -43,6 +44,11 @@ public class PlacementActivity extends AppCompatActivity  {
     private GridLayout layout;
     private int midTile;
     private int nextTile = 1;
+    private Boat porteAvion;
+    private Boat croiseur;
+    private Boat contreTorpilleur1;
+    private Boat contreTorpilleur2;
+    private Boat torpilleur;
 
 
     @Override
@@ -56,11 +62,11 @@ public class PlacementActivity extends AppCompatActivity  {
         /**
          * Create boats
          */
-        Object porteAvion = new Boat(6);
-        Object croiseur = new Boat(3);
-        Object contreTorpilleur1 = new Boat(5);
-        Object contreTorpilleur2 = new Boat(5);
-        Object torpilleur = new Boat(4);
+        porteAvion = new Boat("porteAvion",6);
+        croiseur = new Boat("croiseur",3);
+        contreTorpilleur1 = new Boat("1contreTorpilleur",5);
+        contreTorpilleur2 = new Boat("2contreTorpilleur",5);
+        torpilleur = new Boat("torpilleur",4);
 
 
         /**
@@ -295,9 +301,18 @@ public class PlacementActivity extends AppCompatActivity  {
                     if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
                         for(int i = 0; i < listOfPos.size(); i++) {
                             String tag = String.valueOf(listOfPos.get(i));
-                            int col = Character.getNumericValue(tag.charAt(7));
+                            int tagLength = tag.length();
+                            int col;
+                            if(tagLength == 8) {
+                                col = Character.getNumericValue(tag.charAt(7));
+                            } else {
+                                int col1 = Character.getNumericValue(tag.charAt(7));
+                                int col2 = Character.getNumericValue(tag.charAt(8));
+                                String sCol = String.valueOf(col1) + String.valueOf(col2);
+                                col = parseInt(sCol);
+                            }
                             int row = Character.getNumericValue(tag.charAt(3));
-                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                            if((row >= 0 && row < 10) && (col >= 0 && col < 10)) {
                                 View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
                                 possibleDrop.setBackgroundColor(Color.parseColor("#D1F6FF"));
                             }
@@ -305,11 +320,19 @@ public class PlacementActivity extends AppCompatActivity  {
                     } else {
                         for(int i = 0; i < listOfPos.size(); i++) {
                             String tag = String.valueOf(listOfPos.get(i));
-                            int col = Character.getNumericValue(tag.charAt(7));
+                            int tagLength = tag.length();
+                            int col;
+                            if(tagLength == 8) {
+                                col = Character.getNumericValue(tag.charAt(7));
+                            } else {
+                                int col1 = Character.getNumericValue(tag.charAt(7));
+                                int col2 = Character.getNumericValue(tag.charAt(8));
+                                String sCol = String.valueOf(col1) + String.valueOf(col2);
+                                col = parseInt(sCol);
+                            }
                             int row = Character.getNumericValue(tag.charAt(3));
-                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                            if((row >= 0 && row < 10) && (col >= 0 && col < 10)) {
                                 View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
-                                Log.i("Tag possible view", String.valueOf(listOfPos.get(i)));
                                 possibleDrop.setBackgroundColor(Color.parseColor("#FFBABA"));
                             }
                         }
@@ -321,9 +344,18 @@ public class PlacementActivity extends AppCompatActivity  {
                      */
                     for(int i = 0; i < listOfPos.size(); i++) {
                         String tag = String.valueOf(listOfPos.get(i));
-                        int col = Character.getNumericValue(tag.charAt(7));
+                        int tagLength = tag.length();
+                        int col;
+                        if(tagLength == 8) {
+                            col = Character.getNumericValue(tag.charAt(7));
+                        } else {
+                            int col1 = Character.getNumericValue(tag.charAt(7));
+                            int col2 = Character.getNumericValue(tag.charAt(8));
+                            String sCol = String.valueOf(col1) + String.valueOf(col2);
+                            col = parseInt(sCol);
+                        }
                         int row = Character.getNumericValue(tag.charAt(3));
-                        if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                        if((row >= 0 && row < 10) && (col >= 0 && col < 10)) {
                             View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
                             possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
                             possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
@@ -402,9 +434,18 @@ public class PlacementActivity extends AppCompatActivity  {
                         Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
                         for(int i = 0; i < listOfPos.size(); i++) {
                             String tag = String.valueOf(listOfPos.get(i));
-                            int col = Character.getNumericValue(tag.charAt(7));
+                            int tagLength = tag.length();
+                            int col;
+                            if(tagLength == 8) {
+                                col = Character.getNumericValue(tag.charAt(7));
+                            } else {
+                                int col1 = Character.getNumericValue(tag.charAt(7));
+                                int col2 = Character.getNumericValue(tag.charAt(8));
+                                String sCol = String.valueOf(col1) + String.valueOf(col2);
+                                col = parseInt(sCol);
+                            }
                             int row = Character.getNumericValue(tag.charAt(3));
-                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                            if((row >= 0 && row < 10) && (col >= 0 && col < 10)) {
                                 View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
                                 possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
                                 possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
@@ -618,6 +659,9 @@ public class PlacementActivity extends AppCompatActivity  {
         return flag;
     }
 
+    /**
+     * Calculate the new location of each tile on drop and return it
+     */
     public ArrayList getNewPositionOfTileOnDrop(LinearLayout ll, ArrayList<Bitmap> list, String tag) {
         ArrayList listOfPos = new ArrayList();
         double listSize = list.size();
@@ -714,6 +758,18 @@ public class PlacementActivity extends AppCompatActivity  {
         return flag;
     }
 
+    public ArrayList getCurrentPositionOfBoat(String tag) {
+        ArrayList listOfTiles = getViewsByTag(layout, tag);
+        ArrayList positionList = new ArrayList();
+        for(int i = 0; i < listOfTiles.size(); i++) {
+            View tile = (View) listOfTiles.get(i);
+            View parent = (View) tile.getParent();
+            String pos = String.valueOf(parent.getTag());
+            positionList.add(pos);
+        }
+        return positionList;
+    }
+
     /**
      * Reset position of boats / Reload page
      */
@@ -726,6 +782,12 @@ public class PlacementActivity extends AppCompatActivity  {
      * Sent intent to GameActivity
      */
     public void clickLaunchGame(View v) {
+        porteAvion.setPosition(getCurrentPositionOfBoat(porteAvion.getName()));
+        croiseur.setPosition(getCurrentPositionOfBoat(croiseur.getName()));
+        contreTorpilleur1.setPosition(getCurrentPositionOfBoat(contreTorpilleur1.getName()));
+        contreTorpilleur2.setPosition(getCurrentPositionOfBoat(contreTorpilleur2.getName()));
+        torpilleur.setPosition(getCurrentPositionOfBoat(torpilleur.getName()));
+
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
         finish();
