@@ -3,12 +3,8 @@ package fr.afpa.bataille_navale;
 import static java.lang.Integer.parseInt;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,7 +13,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,9 +22,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -37,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class PlacementActivity extends AppCompatActivity  {
 
@@ -49,7 +40,6 @@ public class PlacementActivity extends AppCompatActivity  {
     private View torpilleurImg;
     private Button button;
     private GridLayout gridStore;
-    private MyRecyclerViewAdapter adapter;
     private GridLayout layout;
     private int midTile;
     private int nextTile = 1;
@@ -83,7 +73,7 @@ public class PlacementActivity extends AppCompatActivity  {
         contreTorpilleur1Img = findViewById(R.id.contre_torpilleur1);
         contreTorpilleur1Img.setTag("1contreTorpilleur");
         contreTorpilleur2Img = findViewById(R.id.contre_torpilleur2);
-        contreTorpilleur1Img.setTag("2contreTorpilleur");
+        contreTorpilleur2Img.setTag("2contreTorpilleur");
         torpilleurImg = findViewById(R.id.torpilleur);
         torpilleurImg.setTag("torpilleur");
 
@@ -99,7 +89,7 @@ public class PlacementActivity extends AppCompatActivity  {
         /**
          * Create the board programmatically in the GridLayout view
          */
-        layout = (GridLayout) findViewById(R.id.MyGrid);
+        layout = findViewById(R.id.MyGrid);
         layout.setRowCount(BoardSize.ROWS);
         layout.setColumnCount(BoardSize.COLUMNS);
 
@@ -166,17 +156,18 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
-     * Set onClick 90° rotation for boats on grid
+     * OnClickListener get list of bitmaps and check its validity
+     * Check if rotation is possible
+     * Call to rotation functions if true
      */
     class MyDragListener implements View.OnDragListener {
         private View.OnClickListener myListener = view -> {
             Log.e("Image name", view.getContentDescription() + "");
             String clickedTag = String.valueOf(view.getTag());
+            View parent = (View) view.getParent();
+            String clickedPlacement = String.valueOf(parent.getTag());
             ArrayList views = getViewsByTag(layout, clickedTag.substring(0, clickedTag.length() - 1));
-            for(int i = 0; i < views.size(); i++) {
-                ImageView obj = (ImageView) views.get(i);
-                Log.i("FIRST view tags :", String.valueOf(obj.getTag()));
-            }
+
             Log.i("views size at onclick :", String.valueOf(views.size()));
             for(int i = 0; i < views.size(); i++) {
                 Object item = views.get(i);
@@ -190,18 +181,22 @@ public class PlacementActivity extends AppCompatActivity  {
                     views.remove(item);
                 }
             }
-            views = getViewsByTag(layout, clickedTag.substring(0, clickedTag.length() - 1));
-            for(int i = 0; i < views.size(); i++) {
-                ImageView obj = (ImageView) views.get(i);
-                Log.i("SECOND view tags :", String.valueOf(obj.getTag()));
+//views = getViewsByTag(layout, clickedTag.substring(0, clickedTag.length() - 1));
+
+            if(checkFullValidityOfNewRotatedPosition(views, view, clickedPlacement)) {
+                for (int i = 0; i < views.size(); i++) {
+                    ImageView newImage = (ImageView) views.get(i);
+                    newImage.setImageBitmap(rotateBitmap(((BitmapDrawable) newImage.getDrawable()).getBitmap(), 90));
+                }
+                rotatePlacementTileOnGrid(views, view);
+            } else {
+                Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
             }
-            for(int i = 0; i < views.size(); i++) {
-                ImageView newImage = (ImageView) views.get(i);
-                newImage.setImageBitmap(rotateBitmap(((BitmapDrawable) newImage.getDrawable()).getBitmap(), 90));
-            }
-            rotatePlacementTileOnGrid(views, view);
         };
 
+        /**
+         * Do a 90° rotation of tile
+         */
         private Bitmap rotateBitmap(Bitmap bitmap, int rotationAngleDegree) {
 
             int w = bitmap.getWidth();
@@ -228,132 +223,68 @@ public class PlacementActivity extends AppCompatActivity  {
             return rotatedBitmap;
         }
 
+        /**
+         * Rotate same boat tile around the clicked tile
+         */
         private void rotatePlacementTileOnGrid(ArrayList views, View clickedTile) {
+            View boat;
             for(int i = 0; i < views.size(); i++) {
                 ImageView obj = (ImageView) views.get(i);
                 Log.i("view tags :", String.valueOf(obj.getTag()));
             }
             String clickedTileTag = String.valueOf(clickedTile.getTag());
-Log.i("clickedTileTag :", String.valueOf(clickedTileTag));
+            Log.i("clickedTileTag :", clickedTileTag);
             int clickedTileOrder = parseInt(clickedTileTag.substring(clickedTileTag.length() - 1));
             LinearLayout clickedParent = (LinearLayout) clickedTile.getParent();
             String clickedPlacement = String.valueOf(clickedParent.getTag());
-            int clickedColI = Character.getNumericValue(clickedPlacement.charAt(7));
-//Log.i("clickedColI :", String.valueOf(clickedColI));
-            int clickedRowI = Character.getNumericValue(clickedPlacement.charAt(3));
-//Log.i("clickedRowI :", String.valueOf(clickedRowI));
-//Log.i("views size :", String.valueOf(views.size()));
-//Log.i("Clicked tile order :", String.valueOf(clickedTileOrder));
 
+            for (int i = 0; i < views.size(); i++) {
 
-            for(int i = 0; i < views.size(); i++) {
-//Log.i("value of i :", String.valueOf(i));
                 ImageView tile = (ImageView) views.get(i);
-
                 String tileTag = String.valueOf(tile.getTag());
-//Log.i("Old tag set : ", String.valueOf(tile.getTag()));
+                String tagBoat = tileTag.substring(0, tileTag.length() - 1);
                 int tileOrder = parseInt(tileTag.substring(tileTag.length() - 1));
-//Log.i("tile order :", String.valueOf(tileOrder));
                 int diffOrder = clickedTileOrder - tileOrder;
-//Log.i("check diff order :", String.valueOf(diffOrder));
-
                 LinearLayout oldParent = (LinearLayout) tile.getParent();
                 String oldPlacement = String.valueOf(oldParent.getTag());
 
-                //if(diffOrder != 0) {
-                    oldParent.removeAllViews();
-                    oldParent.setBackgroundResource(R.drawable.grid_stroke);
-                    ImageView imageView = new ImageView(PlacementActivity.this);
-                    imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    imageView.setAdjustViewBounds(true);
-                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                    //imageView.setTag(null);
-                    oldParent.addView(imageView);
+                oldParent.removeAllViews();
+                oldParent.setBackgroundResource(R.drawable.grid_stroke);
+                ImageView imageView = new ImageView(PlacementActivity.this);
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                oldParent.addView(imageView);
 
-                    int colI = Character.getNumericValue(oldPlacement.charAt(7));
-                    int rowI = Character.getNumericValue(oldPlacement.charAt(3));
-                    int newColI = colI;
-                    int newRowI = rowI;
+                String newPos = getNewPositionOfTileOnRotation(oldPlacement, clickedPlacement, diffOrder);
+                Log.i("Tile new location : ", newPos);
 
+                LinearLayout newContainer = layout.findViewWithTag(newPos);
 
-                    Log.i("tile previous location:", "row" + String.valueOf(rowI) + "col" + String.valueOf(colI));
-                    // Checked position of boat
-                    if(diffOrder > 0) {
-                        if (clickedColI > colI && clickedRowI == rowI) {
-                            // then horizontal left
-                            newColI = colI + diffOrder;
-                            newRowI = rowI - diffOrder;
+                boat = getViewBoatFromTag(tagBoat);
+                Log.i("tagBoat : ", tagBoat);
 
-                        } else if (clickedColI == colI && clickedRowI > rowI) {
-                            // then vertical top
-                            newColI = colI + diffOrder;
-                            newRowI = rowI + diffOrder;
-
-                        } else if (clickedColI < colI && clickedRowI == rowI) {
-                            // then horizontal left
-                            newColI = colI - diffOrder;
-                            newRowI = rowI + diffOrder;
-
-                        } else if (clickedColI == colI && clickedRowI < rowI) {
-                            // then vertical top
-                            newColI = colI - diffOrder;
-                            newRowI = rowI - diffOrder;
-                        }
-                    } else if(diffOrder < 0) {
-                        if (clickedColI < colI && clickedRowI == rowI) {
-                            // then horizontal right
-                            newColI = colI - Math.abs(diffOrder);
-                            newRowI = rowI + Math.abs(diffOrder);
-
-                        } else if (clickedColI == colI && clickedRowI > rowI) {
-                            // then vertical down
-                            newColI = colI + Math.abs(diffOrder);
-                            newRowI = rowI + Math.abs(diffOrder);
-
-                        } else if (clickedColI > colI && clickedRowI == rowI) {
-                            // then horizontal right
-                            newColI = colI + Math.abs(diffOrder);
-                            newRowI = rowI - Math.abs(diffOrder);
-
-                        } else if (clickedColI == colI && clickedRowI < rowI) {
-                            // then vertical down
-                            newColI = colI - Math.abs(diffOrder);
-                            newRowI = rowI - Math.abs(diffOrder);
-                        }
-                    }
-
-
-                    String sNewColI = String.valueOf(newColI);
-                    String sNewRowI = String.valueOf(newRowI);
-
-                    String newPosCol = oldPlacement.substring(0, 7) + sNewColI;
-                    String newPos = newPosCol.substring(0, 3) + sNewRowI + newPosCol.substring(4);
-                    Log.i("Tile new location : ", newPos);
-
-
-                    LinearLayout newContainer = (LinearLayout) layout.findViewWithTag(newPos);
-                    newContainer.setBackgroundResource(0);
-                    ImageView newView = (ImageView) newContainer.getChildAt(0);
-                Log.i("check number children: ", String.valueOf(newContainer.getChildCount()));
-
-
+                ViewGroup parent = (ViewGroup) boat.getParent();
+                if (parent != null) {
+                    parent.removeView(boat);
+                    boat.setVisibility(View.GONE);
+                } else {
+                    Log.i("erreur", "pas de parent");
+                }
+                newContainer.addView(boat);
+                newContainer.setBackgroundResource(0);
+                ImageView newView = (ImageView) newContainer.getChildAt(0);
 
                 Log.i("New tag set : ", String.valueOf(tile.getTag()));
-                    newView.setTag(String.valueOf(tile.getTag()));
+                newView.setTag(String.valueOf(tile.getTag()));
 
-
-
-
-                    newView.setOnClickListener(myListener);
-                    BitmapDrawable drawable = (BitmapDrawable) tile.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    newView.setImageBitmap(bitmap);
-
-
-                //}
+                newView.setOnClickListener(myListener);
+                BitmapDrawable drawable = (BitmapDrawable) tile.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                newView.setImageBitmap(bitmap);
             }
-            Log.i("views size :", String.valueOf(views.size()));
 
+            Log.i("views size :", String.valueOf(views.size()));
         }
 
         /**
@@ -381,76 +312,82 @@ Log.i("clickedTileTag :", String.valueOf(clickedTileTag));
                     break;
                 case DragEvent.ACTION_DROP:
                     /**
-                     * Reassign view to view group
+                     * Check validity of new position
                      */
-                    ImageView view = (ImageView) event.getLocalState();
-                    ViewGroup owner = (ViewGroup) view.getParent();
-                    owner.removeView(view);
+                    ImageView oldView = (ImageView) event.getLocalState();
+                    String tagView = String.valueOf(oldView.getTag());
                     LinearLayout container = (LinearLayout) v;
-                    container.addView(view);
-                    view.setVisibility(View.VISIBLE);
-                    //GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(view.getLayoutParams());
-                    //container.setLayoutParams(layoutParams);
+                    ArrayList<Bitmap> chunkedImages = Crop.defineSplit(oldView);
 
-                    /**
-                     * Split image in several images according to number of spans
-                     */
-                    ArrayList<Bitmap> chunkedImages = Crop.defineSplit(view);
-                    double chunkedImagesSize = chunkedImages.size();
-                    if(chunkedImagesSize %2 == 0) {
-                        midTile = (int) chunkedImagesSize/2;
+                    if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
+
+                        /**
+                         * Reassign view to view group
+                         */
+                        ViewGroup owner = (ViewGroup) oldView.getParent();
+                        owner.removeView(oldView);
+                        container.addView(oldView);
+                        oldView.setVisibility(View.VISIBLE);
+
+                        /**
+                         * Split image in several images according to number of spans
+                         */
+                        double chunkedImagesSize = chunkedImages.size();
+                        if (chunkedImagesSize % 2 == 0) {
+                            midTile = (int) chunkedImagesSize / 2;
+                        } else {
+                            midTile = (int) Math.ceil(chunkedImagesSize / 2);
+                        }
+
+                        /**
+                         * Get My grid cases corresponding to size of chunkedImages list for display
+                         * Copy all dragged image data into target image data
+                         * Attach OnClickListener and Rotation method to target image data
+                         */
+                        Object objTagMain = container.getTag();
+                        String tagMain = String.valueOf(objTagMain);
+                        Log.i("id dropped : ", tagMain);
+                        char cMainI = tagMain.charAt(7);
+                        int MainI = Character.getNumericValue(cMainI);
+
+                        for (int i = 0; i <= midTile; i++) {
+                            int neighbourTileI = MainI - i;
+                            Log.i("id dropped col-i : ", String.valueOf(neighbourTileI));
+                            String sNeighbourTileI = String.valueOf(neighbourTileI);
+                            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+                            Log.i("id tag previous tile : ", tagNeighbour);
+                            LinearLayout neighbourContainer = layout.findViewWithTag(tagNeighbour);
+                            neighbourContainer.setBackgroundResource(0);
+                            ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
+                            neighbourView.setTag(String.valueOf(oldView.getTag()) + (midTile - i));
+                            neighbourView.setOnClickListener(myListener);
+                            neighbourView.setImageBitmap(chunkedImages.get(midTile - i));
+                        }
+
+                        for (int i = midTile; i < chunkedImagesSize - 1; i++) {
+                            int neighbourTileI = MainI + nextTile;
+                            Log.i("next Tile : ", String.valueOf(nextTile));
+                            Log.i("id dropped col+i : ", String.valueOf(neighbourTileI));
+                            String sNeighbourTileI = String.valueOf(neighbourTileI);
+                            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+                            Log.i("id tag next tile : ", tagNeighbour);
+                            LinearLayout neighbourContainer = layout.findViewWithTag(tagNeighbour);
+                            neighbourContainer.setBackgroundResource(0);
+                            ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
+                            neighbourView.setTag(String.valueOf(oldView.getTag()) + (i + 1));
+                            neighbourView.setOnClickListener(myListener);
+                            neighbourView.setImageBitmap(chunkedImages.get(i + 1));
+                            nextTile++;
+
+                        }
+                        nextTile = 1;
                     } else {
-                        midTile = (int) Math.ceil(chunkedImagesSize/2);
+                        Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
+                        v.setBackgroundColor(Color.parseColor("#003C5F"));
+                        v.setBackgroundResource(R.drawable.grid_stroke);
+                        View currentView = (View) event.getLocalState();
+                        currentView.setVisibility(View.VISIBLE);
                     }
-
-                    /**
-                     * Get My grid cases corresponding to size of chunkedImages list for display
-                     * Copy all dragged image data into target image data
-                     * Attach OnClickListener and Rotation method to target image data
-                     */
-                    Log.i("id taille image : ", String.valueOf(chunkedImagesSize));
-                    Log.i("id taille image/2 : ", String.valueOf(midTile));
-                    for(int i = 0; i <= midTile; i++) {
-                        Object objTagMain = container.getTag();
-                        String tagMain = String.valueOf(objTagMain);
-                        Log.i("id dropped : ", tagMain);
-                        char cMainI = tagMain.charAt(7);
-                        int MainI = Character.getNumericValue(cMainI);
-                        int neighbourTileI = MainI - i;
-                        Log.i("id dropped col-i : ", String.valueOf(neighbourTileI));
-                        String sNeighbourTileI = String.valueOf(neighbourTileI);
-                        String tagNeighbour = tagMain.substring(0,7) + sNeighbourTileI;
-                        Log.i("id tag previous tile : ", tagNeighbour);
-                        LinearLayout neighbourContainer = (LinearLayout) layout.findViewWithTag(tagNeighbour);
-                        neighbourContainer.setBackgroundResource(0);
-                        ImageView oldView = (ImageView) view;
-                        ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
-                        neighbourView.setTag(String.valueOf(oldView.getTag())+(midTile - i));
-                        neighbourView.setOnClickListener(myListener);
-                        neighbourView.setImageBitmap(chunkedImages.get(midTile - i));
-                    }
-
-                    for(int i = midTile; i < chunkedImagesSize-1; i++) {
-                        Object objTagMain = container.getTag();
-                        String tagMain = String.valueOf(objTagMain);
-                        Log.i("id dropped : ", tagMain);
-                        char cMainI = tagMain.charAt(7);
-                        int MainI = Character.getNumericValue(cMainI);
-                        int neighbourTileI = MainI + nextTile;
-                        Log.i("id dropped col+i : ", String.valueOf(neighbourTileI));
-                        String sNeighbourTileI = String.valueOf(neighbourTileI);
-                        String tagNeighbour = tagMain.substring(0,7) + sNeighbourTileI;
-                        Log.i("id tag next tile : ", tagNeighbour);
-                        LinearLayout neighbourContainer = (LinearLayout) layout.findViewWithTag(tagNeighbour);
-                        neighbourContainer.setBackgroundResource(0);
-                        ImageView oldView = (ImageView) view;
-                        ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
-                        neighbourView.setTag(String.valueOf(oldView.getTag())+(i+1));
-                        neighbourView.setOnClickListener(myListener);
-                        neighbourView.setImageBitmap(chunkedImages.get(i+1));
-                        nextTile++;
-                    }
-                    nextTile = 1;
 
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
@@ -460,7 +397,7 @@ Log.i("clickedTileTag :", String.valueOf(clickedTileTag));
                      */
                     View currentView = (View) event.getLocalState();
                     reportResult(event.getResult());
-                    if(mDroppedIn == false) {
+                    if(!mDroppedIn) {
                         currentView.setVisibility(View.VISIBLE);
                     }
 
@@ -496,14 +433,13 @@ Log.i("clickedTileTag :", String.valueOf(clickedTileTag));
      */
     private void reportResult(final boolean result) {
         mDroppedIn = result;
-        //Toast.makeText(this, "Dropped in: " + result, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Get all ImageViews from same boat
      */
     private static ArrayList<View> getViewsByTag(GridLayout root, String tag){
-        ArrayList<View> views = new ArrayList<View>();
+        ArrayList<View> views = new ArrayList<>();
         final int childCount = root.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final LinearLayout inner = (LinearLayout) root.getChildAt(i);
@@ -512,9 +448,210 @@ Log.i("clickedTileTag :", String.valueOf(clickedTileTag));
             if (tagObj != null && tagObj.contains(tag)) {
                 views.add(grandChild);
             }
-
         }
         return views;
+    }
+
+    /**
+     * Return ImageView of boat according to tag
+     */
+    private View getViewBoatFromTag(String tagBoat) {
+        View boat = null;
+        if(tagBoat.equals("croiseur")) {
+            boat = croiseurImg;
+        } else if(tagBoat.equals("torpilleur")) {
+            boat = torpilleurImg;
+        } else if(tagBoat.equals("porteAvion")) {
+            boat = porteAvionImg;
+        } else if(tagBoat.equals("1contreTorpilleur")) {
+            boat = contreTorpilleur1Img;
+        } else if(tagBoat.equals("2contreTorpilleur")) {
+            boat = contreTorpilleur2Img;
+        }
+        return boat;
+    }
+
+    /**
+     * Calculate the new location of tile on grid for 90° rotation
+     */
+    public String getNewPositionOfTileOnRotation(String oldPlacement,String  clickedPlacement, int diffOrder) {
+        int clickedColI = Character.getNumericValue(clickedPlacement.charAt(7));
+        int clickedRowI = Character.getNumericValue(clickedPlacement.charAt(3));
+        int colI = Character.getNumericValue(oldPlacement.charAt(7));
+        int rowI = Character.getNumericValue(oldPlacement.charAt(3));
+        int newColI = colI;
+        int newRowI = rowI;
+
+
+        Log.i("tile previous location:", "row" + rowI + "col" + colI);
+        // Checked position of boat
+        if(diffOrder > 0) {
+            //then tile before clicked tile
+            if (clickedColI > colI && clickedRowI == rowI) {
+                // then horizontal left
+                newColI = colI + diffOrder;
+                newRowI = rowI - diffOrder;
+
+            } else if (clickedColI == colI && clickedRowI > rowI) {
+                // then vertical top
+                newColI = colI + diffOrder;
+                newRowI = rowI + diffOrder;
+
+            } else if (clickedColI < colI && clickedRowI == rowI) {
+                // then horizontal right
+                newColI = colI - diffOrder;
+                newRowI = rowI + diffOrder;
+
+            } else if (clickedColI == colI && clickedRowI < rowI) {
+                // then vertical down
+                newColI = colI - diffOrder;
+                newRowI = rowI - diffOrder;
+            }
+        } else if(diffOrder < 0) {
+            //then tile after clicked tile
+            if (clickedColI < colI && clickedRowI == rowI) {
+                // then horizontal left
+                newColI = colI - Math.abs(diffOrder);
+                newRowI = rowI + Math.abs(diffOrder);
+
+            } else if (clickedColI == colI && clickedRowI > rowI) {
+                // then vertical top
+                newColI = colI + Math.abs(diffOrder);
+                newRowI = rowI + Math.abs(diffOrder);
+
+            } else if (clickedColI > colI && clickedRowI == rowI) {
+                // then horizontal right
+                newColI = colI + Math.abs(diffOrder);
+                newRowI = rowI - Math.abs(diffOrder);
+
+            } else if (clickedColI == colI && clickedRowI < rowI) {
+                // then vertical down
+                newColI = colI - Math.abs(diffOrder);
+                newRowI = rowI - Math.abs(diffOrder);
+            }
+        }
+
+        String sNewColI = String.valueOf(newColI);
+        String sNewRowI = String.valueOf(newRowI);
+
+        String newPosCol = oldPlacement.substring(0, 7) + sNewColI;
+
+        return newPosCol.substring(0, 3) + sNewRowI + newPosCol.substring(4);
+    }
+
+    /**
+     * Calculate the new location of each tile on drop
+     * Check if new position is valid
+     */
+    public boolean checkFullValidityOfNewDroppedPosition (LinearLayout ll, ArrayList<Bitmap> list, String tag) {
+        boolean flag;
+        int ok = list.size();
+
+        double listSize = list.size();
+        if (listSize % 2 == 0) {
+            midTile = (int) listSize / 2;
+        } else {
+            midTile = (int) Math.ceil(listSize / 2);
+        }
+
+        for (int i = 0; i <= midTile; i++) {
+            Object objTagMain = ll.getTag();
+            String tagMain = String.valueOf(objTagMain);
+            char cMainI = tagMain.charAt(7);
+            int MainI = Character.getNumericValue(cMainI);
+            int neighbourTileI = MainI - i;
+            String sNeighbourTileI = String.valueOf(neighbourTileI);
+            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+
+            if(!checkValidityOfNewTilePosition(tagNeighbour, tagMain)) {
+                ok--;
+            }
+        }
+
+        for (int i = midTile; i < listSize - 1; i++) {
+            Object objTagMain = ll.getTag();
+            String tagMain = String.valueOf(objTagMain);
+            char cMainI = tagMain.charAt(7);
+            int MainI = Character.getNumericValue(cMainI);
+            int neighbourTileI = MainI + nextTile;
+            String sNeighbourTileI = String.valueOf(neighbourTileI);
+            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+
+            if(!checkValidityOfNewTilePosition(tagNeighbour, tag)) {
+                ok--;
+            }
+            nextTile++;
+        }
+        nextTile = 1;
+
+        if(ok != list.size()) {
+            flag = false;
+        } else {
+            flag = true;
+        }
+
+        return flag;
+    }
+
+    /**
+     * Calculate the new location of each tile on click
+     * Check if new position is valid
+     */
+    private boolean checkFullValidityOfNewRotatedPosition(ArrayList list, View clickedTile, String clickedPlacement) {
+        boolean flag;
+        int ok = list.size();
+        String clickedTileTag = String.valueOf(clickedTile.getTag());
+        int clickedTileOrder = parseInt(clickedTileTag.substring(clickedTileTag.length() - 1));
+
+        for(int i = 0; i < list.size(); i++) {
+
+            ImageView tile = (ImageView) list.get(i);
+            String tileTag = String.valueOf(tile.getTag());
+            int tileOrder = parseInt(tileTag.substring(tileTag.length() - 1));
+            int diffOrder = clickedTileOrder - tileOrder;
+            LinearLayout oldParent = (LinearLayout) tile.getParent();
+            String oldPlacement = String.valueOf(oldParent.getTag());
+
+            String newPos = getNewPositionOfTileOnRotation(oldPlacement, clickedPlacement, diffOrder);
+
+            if(!checkValidityOfNewTilePosition(newPos, clickedTileTag)) {
+                ok--;
+            }
+        }
+
+        if(ok != list.size()) {
+            flag = false;
+        } else {
+            flag = true;
+        }
+
+        return flag;
+    }
+
+    /**
+     * Check if new position is valid
+     */
+    public boolean checkValidityOfNewTilePosition(String tag, String clickedTag) {
+        View childCheck = null;
+        boolean flag = true;
+        String tagChild;
+
+        try {
+            LinearLayout neighbourContainer = layout.findViewWithTag(tag);
+            childCheck = neighbourContainer.getChildAt(0);
+        } catch (NullPointerException e) {
+           flag = false;
+        }
+        if(childCheck != null) {
+            tagChild = String.valueOf(childCheck.getTag());
+            if(!tagChild.equals("null") && !tagChild.contains(clickedTag)) {
+                flag = false;
+            }
+        } else {
+            flag = false;
+        }
+
+        return flag;
     }
 
     /**
