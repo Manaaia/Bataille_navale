@@ -257,6 +257,7 @@ public class PlacementActivity extends AppCompatActivity  {
                 }
                 newContainer.addView(boat);
                 newContainer.setBackgroundResource(0);
+                newContainer.setBackgroundResource(R.drawable.grid_stroke);
                 ImageView newView = (ImageView) newContainer.getChildAt(0);
 
                 Log.i("New tag set : ", String.valueOf(tile.getTag()));
@@ -293,13 +294,24 @@ public class PlacementActivity extends AppCompatActivity  {
                      */
                     if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
                         for(int i = 0; i < listOfPos.size(); i++) {
-                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
-                            possibleDrop.setBackgroundColor(Color.parseColor("#D1F6FF"));
+                            String tag = String.valueOf(listOfPos.get(i));
+                            int col = Character.getNumericValue(tag.charAt(7));
+                            int row = Character.getNumericValue(tag.charAt(3));
+                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                                View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                                possibleDrop.setBackgroundColor(Color.parseColor("#D1F6FF"));
+                            }
                         }
                     } else {
                         for(int i = 0; i < listOfPos.size(); i++) {
-                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
-                            possibleDrop.setBackgroundColor(Color.parseColor("#FFBABA"));
+                            String tag = String.valueOf(listOfPos.get(i));
+                            int col = Character.getNumericValue(tag.charAt(7));
+                            int row = Character.getNumericValue(tag.charAt(3));
+                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                                View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                                Log.i("Tag possible view", String.valueOf(listOfPos.get(i)));
+                                possibleDrop.setBackgroundColor(Color.parseColor("#FFBABA"));
+                            }
                         }
                     }
                     break;
@@ -308,9 +320,14 @@ public class PlacementActivity extends AppCompatActivity  {
                      * Change background of the layout back to normal once item is moved out of it
                      */
                     for(int i = 0; i < listOfPos.size(); i++) {
-                        View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
-                        possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
-                        possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                        String tag = String.valueOf(listOfPos.get(i));
+                        int col = Character.getNumericValue(tag.charAt(7));
+                        int row = Character.getNumericValue(tag.charAt(3));
+                        if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                            possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
+                            possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                        }
                     }
                     break;
                 case DragEvent.ACTION_DROP:
@@ -356,6 +373,7 @@ public class PlacementActivity extends AppCompatActivity  {
                             Log.i("id tag previous tile : ", tagNeighbour);
                             LinearLayout neighbourContainer = layout.findViewWithTag(tagNeighbour);
                             neighbourContainer.setBackgroundResource(0);
+                            neighbourContainer.setBackgroundResource(R.drawable.grid_stroke);
                             ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
                             neighbourView.setTag(String.valueOf(oldView.getTag()) + (midTile - i));
                             neighbourView.setOnClickListener(myListener);
@@ -371,6 +389,7 @@ public class PlacementActivity extends AppCompatActivity  {
                             Log.i("id tag next tile : ", tagNeighbour);
                             LinearLayout neighbourContainer = layout.findViewWithTag(tagNeighbour);
                             neighbourContainer.setBackgroundResource(0);
+                            neighbourContainer.setBackgroundResource(R.drawable.grid_stroke);
                             ImageView neighbourView = (ImageView) neighbourContainer.getChildAt(0);
                             neighbourView.setTag(String.valueOf(oldView.getTag()) + (i + 1));
                             neighbourView.setOnClickListener(myListener);
@@ -382,9 +401,14 @@ public class PlacementActivity extends AppCompatActivity  {
                     } else {
                         Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
                         for(int i = 0; i < listOfPos.size(); i++) {
-                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
-                            possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
-                            possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                            String tag = String.valueOf(listOfPos.get(i));
+                            int col = Character.getNumericValue(tag.charAt(7));
+                            int row = Character.getNumericValue(tag.charAt(3));
+                            if((row >= 0 && row <= 10) && (col >= 0 && col <= 10)) {
+                                View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                                possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
+                                possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                            }
                         }
                         View currentView = (View) event.getLocalState();
                         currentView.setVisibility(View.VISIBLE);
