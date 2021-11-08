@@ -6,7 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/deep_ocean_blue"
+    android:background="@drawable/cdarksea"
     tools:context=".PlacementActivity">
 
     <LinearLayout
@@ -43,14 +43,6 @@
             android:orientation="vertical">
 
 
-            <!-- <androidx.recyclerview.widget.RecyclerView
-                 android:id="@+id/rvNumbers"
-                 android:layout_width="match_parent"
-                 android:layout_height="400dp"
-                 android:padding="20dp"/>-->
-
-
-
              <GridLayout
                  android:id="@+id/MyGrid"
                  android:layout_width="match_parent"
@@ -73,7 +65,6 @@
                 android:rowCount="6"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                android:background="@color/white"
                 android:visibility="visible">
 
                 <ImageView

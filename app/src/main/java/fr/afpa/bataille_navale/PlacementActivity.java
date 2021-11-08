@@ -119,22 +119,6 @@ public class PlacementActivity extends AppCompatActivity  {
                 Log.i("idMain : ", String.valueOf(linearLayout.getTag()));
             }
         }
-
-        // data to populate the RecyclerView with
-        /*for(int i = 1; i <BoardSize.ROWS; i++) {
-            for(int j = 1; j < BoardSize.COLUMNS; j++) {
-
-            }
-        }*/
-       /*f String[] data = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48"};
-
-        // set up the RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.rvNumbers);
-        int numberOfColumns = 10;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
-        adapter = new MyRecyclerViewAdapter(this, data);
-        recyclerView.setAdapter(adapter);*/
-
     }
 
     /**
@@ -293,6 +277,12 @@ public class PlacementActivity extends AppCompatActivity  {
         @Override
         public boolean onDrag(View v, DragEvent event) {
             int action = event.getAction();
+            ImageView oldView = (ImageView) event.getLocalState();
+            String tagView = String.valueOf(oldView.getTag());
+            LinearLayout container = (LinearLayout) v;
+            ArrayList<Bitmap> chunkedImages = Crop.defineSplit(oldView);
+            ArrayList listOfPos = getNewPositionOfTileOnDrop(container, chunkedImages, tagView);
+
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // do nothing
@@ -301,24 +291,32 @@ public class PlacementActivity extends AppCompatActivity  {
                     /**
                      * Change background of the layout where item is entering
                      */
-                    v.setBackgroundColor(Color.parseColor("#ECECEC"));
+                    if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
+                        for(int i = 0; i < listOfPos.size(); i++) {
+                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                            possibleDrop.setBackgroundColor(Color.parseColor("#D1F6FF"));
+                        }
+                    } else {
+                        for(int i = 0; i < listOfPos.size(); i++) {
+                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                            possibleDrop.setBackgroundColor(Color.parseColor("#FFBABA"));
+                        }
+                    }
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     /**
                      * Change background of the layout back to normal once item is moved out of it
                      */
-                    v.setBackgroundColor(Color.parseColor("#003C5F"));
-                    v.setBackgroundResource(R.drawable.grid_stroke);
+                    for(int i = 0; i < listOfPos.size(); i++) {
+                        View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                        possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
+                        possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                    }
                     break;
                 case DragEvent.ACTION_DROP:
                     /**
                      * Check validity of new position
                      */
-                    ImageView oldView = (ImageView) event.getLocalState();
-                    String tagView = String.valueOf(oldView.getTag());
-                    LinearLayout container = (LinearLayout) v;
-                    ArrayList<Bitmap> chunkedImages = Crop.defineSplit(oldView);
-
                     if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
 
                         /**
@@ -383,8 +381,11 @@ public class PlacementActivity extends AppCompatActivity  {
                         nextTile = 1;
                     } else {
                         Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
-                        v.setBackgroundColor(Color.parseColor("#003C5F"));
-                        v.setBackgroundResource(R.drawable.grid_stroke);
+                        for(int i = 0; i < listOfPos.size(); i++) {
+                            View possibleDrop = layout.findViewWithTag(listOfPos.get(i));
+                            possibleDrop.setBackgroundColor(Color.parseColor("#003C5F"));
+                            possibleDrop.setBackgroundResource(R.drawable.grid_stroke);
+                        }
                         View currentView = (View) event.getLocalState();
                         currentView.setVisibility(View.VISIBLE);
                     }
@@ -591,6 +592,41 @@ public class PlacementActivity extends AppCompatActivity  {
         }
 
         return flag;
+    }
+
+    public ArrayList getNewPositionOfTileOnDrop(LinearLayout ll, ArrayList<Bitmap> list, String tag) {
+        ArrayList listOfPos = new ArrayList();
+        double listSize = list.size();
+        if (listSize % 2 == 0) {
+            midTile = (int) listSize / 2;
+        } else {
+            midTile = (int) Math.ceil(listSize / 2);
+        }
+
+        for (int i = 0; i <= midTile; i++) {
+            Object objTagMain = ll.getTag();
+            String tagMain = String.valueOf(objTagMain);
+            char cMainI = tagMain.charAt(7);
+            int MainI = Character.getNumericValue(cMainI);
+            int neighbourTileI = MainI - i;
+            String sNeighbourTileI = String.valueOf(neighbourTileI);
+            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+            listOfPos.add(tagNeighbour);
+        }
+
+        for (int i = midTile; i < listSize - 1; i++) {
+            Object objTagMain = ll.getTag();
+            String tagMain = String.valueOf(objTagMain);
+            char cMainI = tagMain.charAt(7);
+            int MainI = Character.getNumericValue(cMainI);
+            int neighbourTileI = MainI + nextTile;
+            String sNeighbourTileI = String.valueOf(neighbourTileI);
+            String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+            listOfPos.add(tagNeighbour);
+        }
+        nextTile = 1;
+
+        return listOfPos;
     }
 
     /**
