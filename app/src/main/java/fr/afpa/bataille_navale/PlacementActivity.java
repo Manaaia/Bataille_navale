@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PlacementActivity extends AppCompatActivity  {
@@ -62,11 +61,11 @@ public class PlacementActivity extends AppCompatActivity  {
         /**
          * Create boats
          */
-        porteAvion = new Boat("porteAvion",6);
-        croiseur = new Boat("croiseur",3);
-        contreTorpilleur1 = new Boat("1contreTorpilleur",5);
-        contreTorpilleur2 = new Boat("2contreTorpilleur",5);
-        torpilleur = new Boat("torpilleur",4);
+        porteAvion = new Boat("player","porteAvion",6);
+        croiseur = new Boat("player","croiseur",3);
+        contreTorpilleur1 = new Boat("player","1contreTorpilleur",5);
+        contreTorpilleur2 = new Boat("player","2contreTorpilleur",5);
+        torpilleur = new Boat("player","torpilleur",4);
 
 
         /**
@@ -96,34 +95,12 @@ public class PlacementActivity extends AppCompatActivity  {
          * Create the board programmatically in the GridLayout view
          */
         layout = findViewById(R.id.MyGrid);
-        layout.setRowCount(BoardSize.ROWS);
-        layout.setColumnCount(BoardSize.COLUMNS);
-
-        for(int i = 0; i < BoardSize.ROWS; i++) {
-            GridLayout.Spec rowSpec = GridLayout.spec(i, 1, 1);
-            for(int j = 0; j < BoardSize.COLUMNS; j++) {
-                GridLayout.Spec colSpec = GridLayout.spec(j, 1, 1);
-                LinearLayout linearLayout = new LinearLayout(new ContextThemeWrapper(this,R.style.Grid));
-                linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                linearLayout.setId(R.id.row + i + R.id.col + j);
-                linearLayout.setTag("row"+ i + "col" + j);
-                linearLayout.setGravity(Gravity.FILL);
-                linearLayout.setOnDragListener(new MyDragListener());
-                ImageView imageView = new ImageView(this);
-                imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                imageView.setAdjustViewBounds(true);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                linearLayout.addView(imageView);
-                GridLayout.LayoutParams myGLP = new GridLayout.LayoutParams();
-                myGLP.rowSpec = rowSpec;
-                myGLP.columnSpec = colSpec;
-                myGLP.width = 0;
-                myGLP.height = 0;
-                layout.addView(linearLayout, myGLP);
-
-                Log.i("idMain : ", String.valueOf(linearLayout.getTag()));
-            }
+        Board board = new Board();
+        board.createBoard(this, layout);
+        final int childCount = layout.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final LinearLayout linearLayout = (LinearLayout) layout.getChildAt(i);
+            linearLayout.setOnDragListener(new MyDragListener());
         }
     }
 
@@ -171,7 +148,6 @@ public class PlacementActivity extends AppCompatActivity  {
                     views.remove(item);
                 }
             }
-//views = getViewsByTag(layout, clickedTag.substring(0, clickedTag.length() - 1));
 
             if(checkFullValidityOfNewRotatedPosition(views, view, clickedPlacement)) {
                 for (int i = 0; i < views.size(); i++) {
@@ -787,6 +763,15 @@ public class PlacementActivity extends AppCompatActivity  {
         contreTorpilleur1.setPosition(getCurrentPositionOfBoat(contreTorpilleur1.getName()));
         contreTorpilleur2.setPosition(getCurrentPositionOfBoat(contreTorpilleur2.getName()));
         torpilleur.setPosition(getCurrentPositionOfBoat(torpilleur.getName()));
+
+        BoatMgr boatMgr = new BoatMgr(PlacementActivity.this);
+        boatMgr.open();
+        boatMgr.insertBoat(porteAvion);
+        boatMgr.insertBoat(croiseur);
+        boatMgr.insertBoat(contreTorpilleur1);
+        boatMgr.insertBoat(contreTorpilleur2);
+        boatMgr.insertBoat(torpilleur);
+        boatMgr.close();
 
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);

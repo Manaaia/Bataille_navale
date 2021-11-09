@@ -1,68 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".GameActivity"
-    android:background="@color/deep_ocean_blue"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/cdarksea"
+    tools:context=".GameActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/light_grey"
-            android:text="A vous de jouer"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:fontFamily="@font/wargate_normal"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:text="A vous de jouer"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:fontFamily="@font/wargate_normal"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        </LinearLayout>
 
-        <GridLayout
-            android:id="@+id/MyGrid"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/AdverseGrid"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:columnCount="10"
+                android:rowCount="10"
+                android:stretchMode="columnWidth">
+
+            </GridLayout>
+
+            <GridLayout
+                android:id="@+id/MyGrid"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="20dp"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:columnCount="10"
+                android:rowCount="10"
+                android:stretchMode="columnWidth">
+
+            </GridLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="20dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:paddingTop="20dp"
-            android:columnCount="10"
-            android:rowCount="10"
-            android:stretchMode="columnWidth">
+            android:gravity="bottom">
 
-        </GridLayout>
+            <Button
+                android:id="@+id/startGameBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Abandonner"
+                android:fontFamily="@font/wargate_normal"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/light_grey"
+                android:textColor="@color/red_brown"
+                android:onClick="clickAbandon"/>
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="bottom">
-
-        <Button
-            android:id="@+id/startGameBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Abandonner"
-            android:fontFamily="@font/wargate_normal"
-            android:textSize="20sp"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/light_grey"
-            android:textColor="@color/red_brown"
-            android:onClick="clickAbandon"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

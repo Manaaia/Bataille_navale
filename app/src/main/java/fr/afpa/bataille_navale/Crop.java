@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import fr.afpa.bataille_navale.R;
+
 public class Crop {
 
     public static ArrayList<Bitmap> defineSplit(ImageView image) {
