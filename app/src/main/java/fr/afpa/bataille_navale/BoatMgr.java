@@ -24,10 +24,14 @@ public class BoatMgr {
     private static final int NUM_COL_NAME = 2;
     private static final String COL_SIZE = "Size";
     private static final int NUM_COL_SIZE = 3;
+    private static final String COL_LIFE = "Life";
+    private static final int NUM_COL_LIFE = 4;
     private static final String COL_STATE = "State";
-    private static final int NUM_COL_STATE = 4;
+    private static final int NUM_COL_STATE = 5;
+    private static final String COL_ORIENTATION = "Orientation";
+    private static final int NUM_COL_ORIENTATION = 6;
     private static final String COL_POSITION = "Position";
-    private static final int NUM_COL_POSITION = 5;
+    private static final int NUM_COL_POSITION = 7;
 
     private SQLiteDatabase dtb;
     private ConnexionSQLite connexionSQLite;
@@ -49,29 +53,37 @@ public class BoatMgr {
         values.put(COL_TEAM, boat.getTeam());
         values.put(COL_NAME, boat.getName());
         values.put(COL_SIZE, boat.getSize());
+        values.put(COL_LIFE, boat.getLife());
         values.put(COL_STATE, boat.getState());
-        values.put(COL_POSITION, boat.getPosition());
+        values.put(COL_ORIENTATION, boat.getOrientation());
+        values.put(COL_POSITION, boat.getPositionJson());
         dtb.insert(TABLE_BOAT, null, values);
 
         close();
     }
 
-    public int updateMonnaie(int id, Boat boat) {
+    public int updateBoat(int id, Boat boat) {
         ContentValues values = new ContentValues();
         values.put(COL_TEAM, boat.getTeam());
         values.put(COL_NAME, boat.getName());
         values.put(COL_SIZE, boat.getSize());
+        values.put(COL_LIFE, boat.getLife());
         values.put(COL_STATE, boat.getState());
-        values.put(COL_POSITION, boat.getPosition());
+        values.put(COL_ORIENTATION, boat.getOrientation());
+        values.put(COL_POSITION, boat.getPositionJson());
 
         return dtb.update(TABLE_BOAT, values, COL_ID + " = " + id, null);
+    }
+
+    public int deleteBoat() {
+        return dtb.delete(TABLE_BOAT,null,null);
     }
 
     public ArrayList<Boat> getAll(String team) {
         Log.i("team =", team);
         ArrayList<Boat> boatItems = new ArrayList<Boat>();
         open();
-        Cursor c = dtb.query(TABLE_BOAT, new String[]{COL_NAME, COL_SIZE, COL_STATE, COL_POSITION}, COL_TEAM + " = ?", new String[]{"player"}, null, null, null);
+        Cursor c = dtb.query(TABLE_BOAT, new String[]{COL_NAME, COL_SIZE, COL_LIFE, COL_STATE, COL_ORIENTATION, COL_POSITION}, COL_TEAM + " = ?", new String[]{"player"}, null, null, null);
         if(c.getCount() == 0) {
             return null;
         }
@@ -80,8 +92,10 @@ public class BoatMgr {
             do {
                 String name = c.getString(0);
                 int size = c.getInt(1);
-                int state = c.getInt(2);
-                String position = c.getString(3);
+                int life = c.getInt(2);
+                int state = c.getInt(3);
+                String orientation = c.getString(4);
+                String position = c.getString(5);
 
                 // Convert JSON String position to ArrayList
                 JSONObject json = null;
@@ -104,8 +118,9 @@ public class BoatMgr {
                 }
 
                 // Create the Boat
-                Boat b = new Boat(team, name, size);
+                Boat b = new Boat(team, name, size, life);
                 b.setState(state);
+                b.setOrientation(orientation);
                 b.setPosition(listOfBits);
                 boatItems.add(b);
             } while (c.moveToNext());

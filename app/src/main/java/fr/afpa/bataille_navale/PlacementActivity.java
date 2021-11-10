@@ -61,11 +61,11 @@ public class PlacementActivity extends AppCompatActivity  {
         /**
          * Create boats
          */
-        porteAvion = new Boat("player","porteAvion",6);
-        croiseur = new Boat("player","croiseur",3);
-        contreTorpilleur1 = new Boat("player","1contreTorpilleur",5);
-        contreTorpilleur2 = new Boat("player","2contreTorpilleur",5);
-        torpilleur = new Boat("player","torpilleur",4);
+        porteAvion = new Boat("player","porteAvion",6, 6);
+        croiseur = new Boat("player","croiseur",3, 3);
+        contreTorpilleur1 = new Boat("player","1contreTorpilleur",5, 5);
+        contreTorpilleur2 = new Boat("player","2contreTorpilleur",5, 5);
+        torpilleur = new Boat("player","torpilleur",4, 4);
 
 
         /**
@@ -222,7 +222,8 @@ public class PlacementActivity extends AppCompatActivity  {
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 oldParent.addView(imageView);
 
-                String newPos = getNewPositionOfTileOnRotation(oldPlacement, clickedPlacement, diffOrder);
+                String orientation = getOrientation(oldPlacement, clickedPlacement, diffOrder);
+                String newPos = getNewPositionOfTileOnRotation(oldPlacement, orientation, diffOrder);
                 Log.i("Tile new location : ", newPos);
 
                 LinearLayout newContainer = layout.findViewWithTag(newPos);
@@ -516,9 +517,8 @@ public class PlacementActivity extends AppCompatActivity  {
     /**
      * Calculate the new location of tile on grid for 90° rotation
      */
-    public String getNewPositionOfTileOnRotation(String oldPlacement,String  clickedPlacement, int diffOrder) {
-        int clickedColI = Character.getNumericValue(clickedPlacement.charAt(7));
-        int clickedRowI = Character.getNumericValue(clickedPlacement.charAt(3));
+    public String getNewPositionOfTileOnRotation(String oldPlacement,String  orientation, int diffOrder) {
+
         int colI = Character.getNumericValue(oldPlacement.charAt(7));
         int rowI = Character.getNumericValue(oldPlacement.charAt(3));
         int newColI = colI;
@@ -529,44 +529,44 @@ public class PlacementActivity extends AppCompatActivity  {
         // Checked position of boat
         if(diffOrder > 0) {
             //then tile before clicked tile
-            if (clickedColI > colI && clickedRowI == rowI) {
+            if (orientation == "horizontal_left") {
                 // then horizontal left
                 newColI = colI + diffOrder;
                 newRowI = rowI - diffOrder;
 
-            } else if (clickedColI == colI && clickedRowI > rowI) {
+            } else if (orientation == "vertical_top") {
                 // then vertical top
                 newColI = colI + diffOrder;
                 newRowI = rowI + diffOrder;
 
-            } else if (clickedColI < colI && clickedRowI == rowI) {
+            } else if (orientation == "horizontal_right") {
                 // then horizontal right
                 newColI = colI - diffOrder;
                 newRowI = rowI + diffOrder;
 
-            } else if (clickedColI == colI && clickedRowI < rowI) {
+            } else if (orientation == "vertical_down") {
                 // then vertical down
                 newColI = colI - diffOrder;
                 newRowI = rowI - diffOrder;
             }
         } else if(diffOrder < 0) {
             //then tile after clicked tile
-            if (clickedColI < colI && clickedRowI == rowI) {
+            if (orientation == "horizontal_left") {
                 // then horizontal left
                 newColI = colI - Math.abs(diffOrder);
                 newRowI = rowI + Math.abs(diffOrder);
 
-            } else if (clickedColI == colI && clickedRowI > rowI) {
+            } else if (orientation == "vertical_top") {
                 // then vertical top
                 newColI = colI + Math.abs(diffOrder);
                 newRowI = rowI + Math.abs(diffOrder);
 
-            } else if (clickedColI > colI && clickedRowI == rowI) {
+            } else if (orientation == "horizontal_right") {
                 // then horizontal right
                 newColI = colI + Math.abs(diffOrder);
                 newRowI = rowI - Math.abs(diffOrder);
 
-            } else if (clickedColI == colI && clickedRowI < rowI) {
+            } else if (orientation == "vertical_down") {
                 // then vertical down
                 newColI = colI - Math.abs(diffOrder);
                 newRowI = rowI - Math.abs(diffOrder);
@@ -579,6 +579,58 @@ public class PlacementActivity extends AppCompatActivity  {
         String newPosCol = oldPlacement.substring(0, 7) + sNewColI;
 
         return newPosCol.substring(0, 3) + sNewRowI + newPosCol.substring(4);
+    }
+
+    /**
+     * Calculate the new location of tile on grid for 90° rotation
+     */
+    public String getOrientation(String tilePos,String  nextTilePos, int diffOrder) {
+        String orientation = null;
+        int clickedColI = Character.getNumericValue(nextTilePos.charAt(7));
+        int clickedRowI = Character.getNumericValue(nextTilePos.charAt(3));
+        int colI = Character.getNumericValue(tilePos.charAt(7));
+        int rowI = Character.getNumericValue(tilePos.charAt(3));
+
+        // Checked position of boat
+        if(diffOrder > 0) {
+            //then tile before clicked tile
+            if (clickedColI > colI && clickedRowI == rowI) {
+                // then horizontal left
+                orientation = "horizontal_left";
+
+            } else if (clickedColI == colI && clickedRowI > rowI) {
+                // then vertical top
+                orientation = "vertical_top";
+
+            } else if (clickedColI < colI && clickedRowI == rowI) {
+                // then horizontal right
+                orientation = "horizontal_right";
+
+            } else if (clickedColI == colI && clickedRowI < rowI) {
+                // then vertical down
+                orientation = "vertical_down";
+            }
+        } else if(diffOrder < 0) {
+            //then tile after clicked tile
+            if (clickedColI < colI && clickedRowI == rowI) {
+                // then horizontal left
+                orientation = "horizontal_left";
+
+            } else if (clickedColI == colI && clickedRowI > rowI) {
+                // then vertical top
+                orientation = "vertical_top";
+
+            } else if (clickedColI > colI && clickedRowI == rowI) {
+                // then horizontal right
+                orientation = "horizontal_right";
+
+            } else if (clickedColI == colI && clickedRowI < rowI) {
+                // then vertical down
+                orientation = "vertical_down";
+            }
+        }
+
+        return orientation;
     }
 
     /**
@@ -692,7 +744,8 @@ public class PlacementActivity extends AppCompatActivity  {
             LinearLayout oldParent = (LinearLayout) tile.getParent();
             String oldPlacement = String.valueOf(oldParent.getTag());
 
-            String newPos = getNewPositionOfTileOnRotation(oldPlacement, clickedPlacement, diffOrder);
+            String orientation = getOrientation(oldPlacement, clickedPlacement, diffOrder);
+            String newPos = getNewPositionOfTileOnRotation(oldPlacement, orientation, diffOrder);
 
             if(!checkValidityOfNewTilePosition(newPos, clickedTileTag)) {
                 ok--;
@@ -758,14 +811,25 @@ public class PlacementActivity extends AppCompatActivity  {
      * Sent intent to GameActivity
      */
     public void clickLaunchGame(View v) {
+
+        // Add final position to boat object
         porteAvion.setPosition(getCurrentPositionOfBoat(porteAvion.getName()));
         croiseur.setPosition(getCurrentPositionOfBoat(croiseur.getName()));
         contreTorpilleur1.setPosition(getCurrentPositionOfBoat(contreTorpilleur1.getName()));
         contreTorpilleur2.setPosition(getCurrentPositionOfBoat(contreTorpilleur2.getName()));
         torpilleur.setPosition(getCurrentPositionOfBoat(torpilleur.getName()));
 
+        // Add final orientation to boat object
+        porteAvion.setOrientation(getOrientation(String.valueOf(porteAvion.getPosition().get(0)), String.valueOf(porteAvion.getPosition().get(1)), 1));
+        croiseur.setOrientation(getOrientation(String.valueOf(croiseur.getPosition().get(0)), String.valueOf(croiseur.getPosition().get(1)), 1));
+        contreTorpilleur1.setOrientation(getOrientation(String.valueOf(contreTorpilleur1.getPosition().get(0)), String.valueOf(contreTorpilleur1.getPosition().get(1)), 1));
+        contreTorpilleur2.setOrientation(getOrientation(String.valueOf(contreTorpilleur2.getPosition().get(0)), String.valueOf(contreTorpilleur2.getPosition().get(1)), 1));
+        torpilleur.setOrientation(getOrientation(String.valueOf(torpilleur.getPosition().get(0)), String.valueOf(torpilleur.getPosition().get(1)), 1));
+
+        // Insert boat object into database
         BoatMgr boatMgr = new BoatMgr(PlacementActivity.this);
         boatMgr.open();
+        boatMgr.deleteBoat();
         boatMgr.insertBoat(porteAvion);
         boatMgr.insertBoat(croiseur);
         boatMgr.insertBoat(contreTorpilleur1);
@@ -773,6 +837,7 @@ public class PlacementActivity extends AppCompatActivity  {
         boatMgr.insertBoat(torpilleur);
         boatMgr.close();
 
+        // Start GameActivity
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
         finish();
