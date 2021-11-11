@@ -9,25 +9,12 @@
     tools:context=".GameActivity">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/light_grey"
-                android:text="A vous de jouer"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:fontFamily="@font/wargate_normal"/>
-
-        </LinearLayout>
+        <include layout="@layout/toast"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Abandonner"
+                android:text="Quitter"
                 android:fontFamily="@font/wargate_normal"
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
