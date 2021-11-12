@@ -15,6 +15,7 @@ public class Crop {
     public static ArrayList<Bitmap> defineSplit(ImageView image) {
         int chunkNumbers = 0;
 
+
         switch (image.getId()) {
             case R.id.porte_avion:
                 chunkNumbers = 6;
@@ -56,8 +57,10 @@ public class Crop {
         BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+
         rows = 1;
         cols = chunkNumbers;
+
         chunkHeight = bitmap.getHeight() / rows;
         chunkWidth = bitmap.getWidth() / cols;
 

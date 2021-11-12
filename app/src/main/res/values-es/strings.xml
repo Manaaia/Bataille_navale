@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Batalla naval</string>
     <string name="title">Batalla naval</string>
+    <string name="newGame">Nuevo juego</string>
+    <string name="exit">Salida</string>
+    <string name="title2">Coloca tus botes</string>
+    <string name="infoPlacement">Toca un barco, arrástralo al mosaico deseado y suéltalo. Luego, haz clic en él para rotar el barco.</string>
+    <string name="launchGame">Abrir juego</string>
+    <string name="reset">Reiniciar</string>
+    <string name="title3">Sobrevivir !</string>
+    <string name="infoGame">Haga clic en el mosaico para disparar</string>
+    <string name="tStartTurn">Tu empiezas</string>
+    <string name="touched">Tocado !</string>
+    <string name="sunk">Hundido !</string>
+    <string name="missed">Omitido !</string>
+    <string name="player">Jugador/a</string>
+    <string name="rival">Enemigo</string>
 </resources>

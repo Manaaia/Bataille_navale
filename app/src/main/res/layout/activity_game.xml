@@ -14,6 +14,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_grey"
+            android:text="@string/title3"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/wargate_normal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_grey"
+            android:text="@string/infoGame"
+            android:fontFamily="@font/zen_antique_regular"
+            android:gravity="center"/>
+
         <include layout="@layout/toast"/>
 
         <LinearLayout
@@ -64,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Quitter"
+                android:text="@string/exit"
                 android:fontFamily="@font/wargate_normal"
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"

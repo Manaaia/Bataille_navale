@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">The Sea Battle</string>
     <string name="title">The Sea Battle</string>
+    <string name="newGame">New Game</string>
+    <string name="exit">Exit</string>
+    <string name="title2">Place your fleet</string>
+    <string name="infoPlacement">Touch a boat, drag it to the desired tile and release it. Then, click on it to rotate the boat.</string>
+    <string name="launchGame">Launch game</string>
+    <string name="reset">Reset</string>
+    <string name="title3">Survive !</string>
+    <string name="infoGame">Click on tile to shoot</string>
+    <string name="tStartTurn">You start</string>
+    <string name="touched">Touched!</string>
+    <string name="sunk">Sunk!</string>
+    <string name="missed">Missed!</string>
+    <string name="player">Player</string>
+    <string name="rival">Enemy</string>
 </resources>

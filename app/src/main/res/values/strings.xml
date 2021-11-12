@@ -1,4 +1,18 @@
 <resources>
-    <string name="app_name">La bataille navale</string>
-    <string name="title">La bataille navale</string>
+    <string name="app_name">Bataille navale</string>
+    <string name="title">Bataille navale</string>
+    <string name="newGame">Nouvelle partie</string>
+    <string name="exit">Quitter</string>
+    <string name="title2">Placez vos navires</string>
+    <string name="infoPlacement">Appuyez sur un bateau et faîte le glisser jusqu\'à l\'emplacement désiré puis relachez-le. Une fois fait, vous pourrez modifier son orientation en cliquant dessus.</string>
+    <string name="launchGame">Lancer la partie</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="title3">Survivez !</string>
+    <string name="infoGame">Cliquez sur les cases pour tirer</string>
+    <string name="tStartTurn">A toi de commencer</string>
+    <string name="touched">Touché !</string>
+    <string name="sunk">Coulé !</string>
+    <string name="missed">Raté !</string>
+    <string name="player">Joueur</string>
+    <string name="rival">Ennemi</string>
 </resources>

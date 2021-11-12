@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/light_grey"
-                android:text="Placez vos navires"
+                android:text="@string/title2"
                 android:gravity="center"
                 android:textSize="20sp"
                 android:fontFamily="@font/wargate_normal"/>
@@ -32,7 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/light_grey"
-                android:text="Appuyez sur un bateau et faîte le glisser jusqu'à l'emplacement désiré puis relachez-le. Une fois fait, vous pourrez modifier son orientation en cliquant dessus."
+                android:fontFamily="@font/zen_antique_regular"
+                android:text="@string/infoPlacement"
                 android:gravity="center"/>
 
         </LinearLayout>
@@ -136,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Lancer la partie"
+                android:text="@string/launchGame"
                 android:fontFamily="@font/wargate_normal"
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
@@ -149,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Reset"
+                android:text="@string/reset"
                 android:fontFamily="@font/wargate_normal"
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"

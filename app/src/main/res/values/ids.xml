@@ -2,4 +2,9 @@
 <resources>
     <item name="row" type="id"/>
     <item name="col" type="id"/>
+    <item name="porte_avion" type="id"/>
+    <item name="croiseur" type="id"/>
+    <item name="contre_torpilleur1" type="id"/>
+    <item name="contre_torpilleur2" type="id"/>
+    <item name="torpilleur" type="id"/>
 </resources>

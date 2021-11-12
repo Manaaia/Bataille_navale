@@ -152,42 +152,14 @@ public class PlacementActivity extends AppCompatActivity  {
             if(checkFullValidityOfNewRotatedPosition(views, view, clickedPlacement)) {
                 for (int i = 0; i < views.size(); i++) {
                     ImageView newImage = (ImageView) views.get(i);
-                    newImage.setImageBitmap(rotateBitmap(((BitmapDrawable) newImage.getDrawable()).getBitmap(), 90));
+                    // Rotate bitmaps
+                    newImage.setImageBitmap(Rotate.rotateBitmap(((BitmapDrawable) newImage.getDrawable()).getBitmap(), 90));
                 }
                 rotatePlacementTileOnGrid(views, view);
             } else {
                 Toast.makeText(PlacementActivity.this, "Placement non valide", Toast.LENGTH_SHORT).show();
             }
         };
-
-        /**
-         * Do a 90° rotation of tile
-         */
-        private Bitmap rotateBitmap(Bitmap bitmap, int rotationAngleDegree) {
-
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
-
-            int newW = w, newH = h;
-            if (rotationAngleDegree == 90 || rotationAngleDegree == 270) {
-                newW = h;
-                newH = w;
-            }
-            Bitmap rotatedBitmap = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
-            Canvas canvas = new Canvas(rotatedBitmap);
-
-            Rect rect = new Rect(0, 0, newW, newH);
-            Matrix matrix = new Matrix();
-            float px = rect.exactCenterX();
-            float py = rect.exactCenterY();
-            matrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
-            matrix.postRotate(rotationAngleDegree);
-            matrix.postTranslate(px, py);
-            canvas.drawBitmap(bitmap, matrix, new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG));
-            matrix.reset();
-
-            return rotatedBitmap;
-        }
 
         /**
          * Rotate same boat tile around the clicked tile
@@ -354,14 +326,9 @@ public class PlacementActivity extends AppCompatActivity  {
                         oldView.setVisibility(View.VISIBLE);
 
                         /**
-                         * Split image in several images according to number of spans
+                         * get MidTile
                          */
-                        double chunkedImagesSize = chunkedImages.size();
-                        if (chunkedImagesSize % 2 == 0) {
-                            midTile = (int) chunkedImagesSize / 2;
-                        } else {
-                            midTile = (int) Math.ceil(chunkedImagesSize / 2);
-                        }
+                        midTile = getMidTile(chunkedImages);
 
                         /**
                          * Get My grid cases corresponding to size of chunkedImages list for display
@@ -389,7 +356,7 @@ public class PlacementActivity extends AppCompatActivity  {
                             neighbourView.setImageBitmap(chunkedImages.get(midTile - i));
                         }
 
-                        for (int i = midTile; i < chunkedImagesSize - 1; i++) {
+                        for (int i = midTile; i < chunkedImages.size() - 1; i++) {
                             int neighbourTileI = MainI + nextTile;
                             Log.i("next Tile : ", String.valueOf(nextTile));
                             Log.i("id dropped col+i : ", String.valueOf(neighbourTileI));
@@ -472,6 +439,20 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
+     * Split image in several images according to number of spans
+     */
+    public static int getMidTile(ArrayList chunkedImages) {
+        double chunkedImagesSize = chunkedImages.size();
+        int midTile = 0;
+        if (chunkedImagesSize % 2 == 0) {
+            midTile = (int) chunkedImagesSize / 2;
+        } else {
+            midTile = (int) Math.ceil(chunkedImagesSize / 2);
+        }
+        return midTile;
+    }
+
+    /**
      * Check drop status (in target = true, out of target = false)
      */
     private void reportResult(final boolean result) {
@@ -515,7 +496,7 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
-     * Calculate the new location of tile on grid for 90° rotation
+     * Calculate the new location of tile on grid for rotation
      */
     public String getNewPositionOfTileOnRotation(String oldPlacement,String  orientation, int diffOrder) {
 
@@ -582,7 +563,7 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
-     * Calculate the new location of tile on grid for 90° rotation
+     * Get full orientation of boat (0, 90, 180, 270)
      */
     public String getOrientation(String tilePos,String  nextTilePos, int diffOrder) {
         String orientation = null;
@@ -631,6 +612,20 @@ public class PlacementActivity extends AppCompatActivity  {
         }
 
         return orientation;
+    }
+
+    /**
+     * Check if boat is horizontal or vertical
+     */
+    public String getSimpleOrientation(String tilePos,String  nextTilePos, int diffOrder) {
+        String orientation = getOrientation(tilePos,nextTilePos,diffOrder);
+        String simpleOrientation = null;
+        if(orientation.contains("horizontal")) {
+            simpleOrientation = "horizontal";
+        } else {
+            simpleOrientation = "vertical";
+        }
+        return simpleOrientation;
     }
 
     /**
@@ -787,6 +782,9 @@ public class PlacementActivity extends AppCompatActivity  {
         return flag;
     }
 
+    /**
+     * Get positions of all tiles of boat on grid
+     */
     public ArrayList getCurrentPositionOfBoat(String tag) {
         ArrayList listOfTiles = getViewsByTag(layout, tag);
         ArrayList positionList = new ArrayList();
@@ -820,11 +818,11 @@ public class PlacementActivity extends AppCompatActivity  {
         torpilleur.setPosition(getCurrentPositionOfBoat(torpilleur.getName()));
 
         // Add final orientation to boat object
-        porteAvion.setOrientation(getOrientation(String.valueOf(porteAvion.getPosition().get(0)), String.valueOf(porteAvion.getPosition().get(1)), 1));
-        croiseur.setOrientation(getOrientation(String.valueOf(croiseur.getPosition().get(0)), String.valueOf(croiseur.getPosition().get(1)), 1));
-        contreTorpilleur1.setOrientation(getOrientation(String.valueOf(contreTorpilleur1.getPosition().get(0)), String.valueOf(contreTorpilleur1.getPosition().get(1)), 1));
-        contreTorpilleur2.setOrientation(getOrientation(String.valueOf(contreTorpilleur2.getPosition().get(0)), String.valueOf(contreTorpilleur2.getPosition().get(1)), 1));
-        torpilleur.setOrientation(getOrientation(String.valueOf(torpilleur.getPosition().get(0)), String.valueOf(torpilleur.getPosition().get(1)), 1));
+        porteAvion.setOrientation(getSimpleOrientation(String.valueOf(porteAvion.getPosition().get(0)), String.valueOf(porteAvion.getPosition().get(1)), 1));
+        croiseur.setOrientation(getSimpleOrientation(String.valueOf(croiseur.getPosition().get(0)), String.valueOf(croiseur.getPosition().get(1)), 1));
+        contreTorpilleur1.setOrientation(getSimpleOrientation(String.valueOf(contreTorpilleur1.getPosition().get(0)), String.valueOf(contreTorpilleur1.getPosition().get(1)), 1));
+        contreTorpilleur2.setOrientation(getSimpleOrientation(String.valueOf(contreTorpilleur2.getPosition().get(0)), String.valueOf(contreTorpilleur2.getPosition().get(1)), 1));
+        torpilleur.setOrientation(getSimpleOrientation(String.valueOf(torpilleur.getPosition().get(0)), String.valueOf(torpilleur.getPosition().get(1)), 1));
 
         // Insert boat object into database
         BoatMgr boatMgr = new BoatMgr(PlacementActivity.this);
