@@ -15,4 +15,6 @@
     <string name="missed">Omitido !</string>
     <string name="player">Jugador/a</string>
     <string name="rival">Enemigo</string>
+    <string name="score">Scores</string>
+    <string name="back">Regreso</string>
 </resources>

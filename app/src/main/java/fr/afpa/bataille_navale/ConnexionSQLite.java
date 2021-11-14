@@ -17,11 +17,19 @@ public class ConnexionSQLite extends SQLiteOpenHelper {
     private static final String COL_STATE = "State";
     private static final String COL_ORIENTATION = "Orientation";
     private static final String COL_POSITION = "Position";
+    private static final String TABLE_SCORE = "table_score";
+    private static final String COL_ID_SCORE = "ID";
+    private static final String COL_RESULT= "Result";
+    private static final String COL_COUNT = "Count";
 
-    private static final String CREATE_DTB = "CREATE TABLE " + TABLE_BOAT + " ("
+    private static final String CREATE_TABLE_BOAT = "CREATE TABLE " + TABLE_BOAT + " ("
             + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_TEAM + " TEXT NOT NULL, "
             + COL_NAME + " TEXT NOT NULL, " + COL_SIZE + " INT NOT NULL, " + COL_LIFE + " INT NOT NULL, "
             + COL_STATE + " INT NOT NULL, " + COL_ORIENTATION + " TEXT NOT NULL, " + COL_POSITION + " TEXT NOT NULL);";
+
+    private static final String CREATE_TABLE_SCORE = "CREATE TABLE IF NOT EXISTS " + TABLE_SCORE + " ("
+            + COL_ID_SCORE + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COL_RESULT + " BOOLEAN NOT NULL, " + COL_COUNT + " INTEGER NOT NULL);";
 
     public ConnexionSQLite(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -29,7 +37,9 @@ public class ConnexionSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_DTB);
+
+        db.execSQL(CREATE_TABLE_BOAT);
+        db.execSQL(CREATE_TABLE_SCORE);
     }
 
     @Override

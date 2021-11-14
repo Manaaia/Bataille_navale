@@ -157,6 +157,7 @@ public class GameActivity extends AppCompatActivity {
                 }, 1000);*/
 
                 v.setOnClickListener(null);
+                counter++;
 
                 turn = "rival";
 
@@ -558,11 +559,14 @@ public class GameActivity extends AppCompatActivity {
      * Calls alert dialog that indicates if won or lost and offers to start new game or exit
      */
     private void endGame(String losingTeam) {
+        boolean result;
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         if(losingTeam.equals("rival")) {
+            result = true;
             // alerte Vous avez gagné
             builder.setMessage("Vous avez gagné !");
         } else {
+            result = false;
             // alerte vous avez perdu
             builder.setMessage("Vous avez perdu...");
         }
@@ -581,12 +585,18 @@ public class GameActivity extends AppCompatActivity {
         builder.setPositiveButton("Quitter", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
+
+                Intent i = new Intent(GameActivity.this, MainActivity.class);
+                startActivity(i);
                 GameActivity.this.finish();
             }
         });
 
         AlertDialog alert = builder.create();
         alert.show();
+
+        ScoreMgr scoreMgr = new ScoreMgr(GameActivity.this);
+        scoreMgr.insertScore(result, counter);
     }
 
     /**

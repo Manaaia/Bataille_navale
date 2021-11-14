@@ -39,6 +39,18 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:text="@string/score"
+            android:fontFamily="@font/wargate_normal"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/light_grey"
+            android:textColor="@color/red_brown"
+            android:onClick="clickScore"/>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:text="@string/exit"
             android:fontFamily="@font/wargate_normal"
             android:textSize="20sp"

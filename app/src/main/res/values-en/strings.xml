@@ -15,4 +15,6 @@
     <string name="missed">Missed!</string>
     <string name="player">Player</string>
     <string name="rival">Enemy</string>
+    <string name="score">Scores</string>
+    <string name="back">Back</string>
 </resources>

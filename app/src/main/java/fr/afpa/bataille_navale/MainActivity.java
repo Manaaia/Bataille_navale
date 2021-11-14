@@ -24,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Set intent to ScoreActivity
+     */
+    public void clickScore(View v) {
+        Intent intent = new Intent(this, ScoreActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
      * Exit app
      */
     public void clickExit(View v) {
