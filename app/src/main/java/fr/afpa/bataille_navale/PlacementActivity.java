@@ -439,7 +439,7 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
-     * Split image in several images according to number of spans
+     * Get upper mid value of an ArrayList
      */
     public static int getMidTile(ArrayList chunkedImages) {
         double chunkedImagesSize = chunkedImages.size();
@@ -806,6 +806,9 @@ public class PlacementActivity extends AppCompatActivity  {
     }
 
     /**
+     * set position of boats on grid
+     * set simple orientation of boats on grid
+     * add boats to database
      * Sent intent to GameActivity
      */
     public void clickLaunchGame(View v) {

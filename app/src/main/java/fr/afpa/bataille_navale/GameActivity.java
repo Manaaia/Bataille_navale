@@ -220,7 +220,7 @@ public class GameActivity extends AppCompatActivity {
                 int index = random.nextInt(orientations.size());
                 orientation = orientations.get(index);
 
-                // Get random midTile and its position on Grid
+                // Get random position on Grid
                 int row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
                 int col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
                 int size = fleet.get(i).getSize();
@@ -348,8 +348,7 @@ public class GameActivity extends AppCompatActivity {
 
                     /**
                      * Get My grid cases corresponding to size of chunkedImages list for display
-                     * Copy all dragged image data into target image data
-                     * Attach OnClickListener and Rotation method to target image data
+                     * Copy bitmap data into target image data
                      */
                     Log.i("id dropped : ", tagLl);
                     char colI = tagLl.charAt(7);
@@ -593,7 +592,7 @@ public class GameActivity extends AppCompatActivity {
     /**
      * Set intent to go back to MainActivity
      */
-    public void clickAbandon(View v) {
+    public void clickExit(View v) {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();

@@ -12,6 +12,9 @@ import fr.afpa.bataille_navale.R;
 
 public class Crop {
 
+    /**
+     * Define number of bitmaps to create from image
+     */
     public static ArrayList<Bitmap> defineSplit(ImageView image) {
         int chunkNumbers = 0;
 
@@ -42,6 +45,9 @@ public class Crop {
         return splitImage(image, chunkNumbers);
     }
 
+    /**
+     * Split the image into bitmaps
+     */
     private static ArrayList<Bitmap> splitImage(ImageView image, int chunkNumbers) {
 
         //For the number of rows and columns of the grid to be displayed

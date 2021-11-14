@@ -87,7 +87,7 @@
                 android:layout_gravity="center_horizontal"
                 android:backgroundTint="@color/light_grey"
                 android:textColor="@color/red_brown"
-                android:onClick="clickAbandon"/>
+                android:onClick="clickExit"/>
 
         </LinearLayout>
     </LinearLayout>

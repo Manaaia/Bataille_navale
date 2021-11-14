@@ -1,7 +1,6 @@
 package fr.afpa.bataille_navale;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ public class Board {
 
     public void createBoard(Context context, GridLayout layout) {
         /**
-         * Create the board programmatically in the GridLayout view
+         * Create the positioning board programmatically in the GridLayout view
          */
         layout.setRowCount(Board.ROWS);
         layout.setColumnCount(Board.COLUMNS);
@@ -48,7 +47,7 @@ public class Board {
 
     public void createGameBoard(Context context, GridLayout layout) {
         /**
-         * Create the board programmatically in the GridLayout view
+         * Create the game board programmatically in the GridLayout view
          */
         layout.setRowCount(Board.ROWS);
         layout.setColumnCount(Board.COLUMNS);

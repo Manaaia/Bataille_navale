@@ -17,35 +17,37 @@ public class BoatMgr {
     private static final String DTB_NAME = "bataille_navale";
     private static final String TABLE_BOAT = "table_boat";
     private static final String COL_ID = "ID";
-    private static final int NUM_COL_ID = 0;
     private static final String COL_TEAM = "team";
-    private static final int NUM_COL_TEAM = 1;
     private static final String COL_NAME = "Name";
-    private static final int NUM_COL_NAME = 2;
     private static final String COL_SIZE = "Size";
-    private static final int NUM_COL_SIZE = 3;
     private static final String COL_LIFE = "Life";
-    private static final int NUM_COL_LIFE = 4;
     private static final String COL_STATE = "State";
-    private static final int NUM_COL_STATE = 5;
     private static final String COL_ORIENTATION = "Orientation";
-    private static final int NUM_COL_ORIENTATION = 6;
     private static final String COL_POSITION = "Position";
-    private static final int NUM_COL_POSITION = 7;
 
     private SQLiteDatabase dtb;
     private ConnexionSQLite connexionSQLite;
 
+    /**
+     * Create new instance of Boat Mgr and connect to the database
+     */
     public BoatMgr(Context context) {
         connexionSQLite = new ConnexionSQLite(context, DTB_NAME, null, DTB_VERSION);
     }
 
+    /**
+     * Open database access
+     */
     public void open() { dtb = connexionSQLite.getWritableDatabase(); }
 
+    /**
+     * Close database access
+     */
     public void close() { dtb.close(); }
 
-    public SQLiteDatabase getDtb() { return dtb; }
-
+    /**
+     * Insert boat into table_boat
+     */
     public void insertBoat(Boat boat) {
         open();
 
@@ -62,6 +64,10 @@ public class BoatMgr {
         close();
     }
 
+    /**
+     * Modify boat into table_boat
+     */
+    // For "continue game" functionality
     public int updateBoat(int id, Boat boat) {
         ContentValues values = new ContentValues();
         values.put(COL_TEAM, boat.getTeam());
@@ -75,10 +81,16 @@ public class BoatMgr {
         return dtb.update(TABLE_BOAT, values, COL_ID + " = " + id, null);
     }
 
+    /**
+     * Delete table_boat
+     */
     public int deleteBoat() {
         return dtb.delete(TABLE_BOAT,null,null);
     }
 
+    /**
+     * Get all boats where team equals given team
+     */
     public ArrayList<Boat> getAll(String team) {
         Log.i("team =", team);
         ArrayList<Boat> boatItems = new ArrayList<Boat>();
