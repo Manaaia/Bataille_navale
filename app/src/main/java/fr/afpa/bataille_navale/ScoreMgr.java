@@ -52,7 +52,7 @@ public class ScoreMgr {
     /**
      * Get all scores
      */
-    public ArrayList getAll() {
+    public ArrayList getAll(Context context) {
         ArrayList scores = new ArrayList();
         open();
         Cursor c = dtb.query(TABLE_SCORE, new String[]{COL_ID, COL_RESULT, COL_COUNT}, null, null, null, null, null);
@@ -67,13 +67,15 @@ public class ScoreMgr {
                 int count = c.getInt(2);
 
                 // Create the Score string
-                String sResult;
+                String sResult = null;
                 if(result) {
-                    sResult = "Gagné";
+                    sResult = context.getResources().getString(R.string.won);
                 } else {
-                    sResult = "Perdu";
+                    sResult = context.getResources().getString(R.string.lost);
                 }
-                String score = "Partie " + id + " : " + sResult + " en " + count + " coups";
+                String score = context.getResources().getString(R.string.game) + " "+ id + " "
+                        + sResult + " " + context.getResources().getString(R.string.in) + " " + count
+                        + " " + context.getResources().getString(R.string.counts);;
                 scores.add(score);
             } while (c.moveToNext());
         }

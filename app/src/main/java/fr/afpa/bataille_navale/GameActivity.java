@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,7 +54,11 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         boatMgr = new BoatMgr(this);
-        rival = new AI(0);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("DiffPref", 0); // 0 - for private mode
+        int level = pref.getInt("level", -1);
+
+        rival = new AI(level);
 
 
         //Initialize toast view for player information
@@ -412,14 +417,129 @@ public class GameActivity extends AppCompatActivity {
      */
     private void rivalAim(int level) {
         if(turn.equals("rival")) {
-            String tileTag;
+            String tileTag = null;
+            String txt = null;
+            int row = 0;
+            int col = 0;
+            int random = 0;
+            ArrayList checkHitTag = new ArrayList();
 
             if (level == 0) {
                 do {
-                    int row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
-                    int col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                    row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                    col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
                     tileTag = "row" + row + "col" + col;
                 } while (checkHits.contains(tileTag));
+            } else if(level == 1) {
+                do {
+                    if(checkHits.size() > 0) {
+                        txt = checkHit(String.valueOf(checkHits.get(checkHits.size() - 1)), myFleet);
+                        Log.i("tag-1", String.valueOf(checkHits.get(checkHits.size() - 1)));
+                        Log.i("txt", txt);
+                        if(txt.equals(getResources().getString(R.string.touched))) {
+                            String hitTag = String.valueOf(checkHits.get(checkHits.size()-1));
+                            Log.i("lastHit", hitTag);
+                            char sCol = hitTag.charAt(7);
+                            char sRow = hitTag.charAt(3);
+                            col = Character.getNumericValue(sCol);
+                            row = Character.getNumericValue(sRow);
+                            if(checkHits.size() > 1) {
+                                String txt2 = checkHit(String.valueOf(checkHits.get(checkHits.size() - 2)), myFleet);
+                                if(txt2.equals(getResources().getString(R.string.touched))) {
+                                    String hitTag2 = String.valueOf(checkHits.get(checkHits.size() - 2));
+                                    Log.i("lastHit2", hitTag2);
+                                    char sCol2 = hitTag2.charAt(7);
+                                    char sRow2 = hitTag2.charAt(3);
+                                    int col2 = Character.getNumericValue(sCol2);
+                                    int row2 = Character.getNumericValue(sRow2);
+
+                                    if (col - col2 == 1) {
+                                        col++;
+                                    } else if (col - col2 == -1) {
+                                        col--;
+                                    } else if (row - row2 == 1) {
+                                        row++;
+                                    } else if (row - row2 == -1) {
+                                        row--;
+                                    }
+                                    tileTag = "row" + row + "col" + col;
+                                    if(checkHits.contains(tileTag) || col > 10 || col < 0 || row > 10 || row < 0) {
+                                        do {
+                                            do {
+                                                random = ThreadLocalRandom.current().nextInt(0, 4);
+                                                Log.i("random", String.valueOf(random));
+                                                Log.i("check", String.valueOf(checkHitTag));
+                                            } while (checkHitTag.contains(random));
+                                            if (random == 0) {
+                                                col++;
+                                            } else if (random == 1) {
+                                                col--;
+                                            } else if (random == 2) {
+                                                row++;
+                                            } else {
+                                                row--;
+                                            }
+                                            Log.i("col", String.valueOf(col));
+                                            Log.i("row", String.valueOf(row));
+                                            checkHitTag.add(random);
+                                        } while (col > 10 || col < 0 || row > 10 || row < 0);
+                                    }
+                                } else {
+                                    do {
+                                        do {
+                                            random = ThreadLocalRandom.current().nextInt(0, 4);
+                                            Log.i("random", String.valueOf(random));
+                                            Log.i("check", String.valueOf(checkHitTag));
+                                        } while (checkHitTag.contains(random));
+                                        if (random == 0) {
+                                            col++;
+                                        } else if (random == 1) {
+                                            col--;
+                                        } else if (random == 2) {
+                                            row++;
+                                        } else {
+                                            row--;
+                                        }
+                                        Log.i("col", String.valueOf(col));
+                                        Log.i("row", String.valueOf(row));
+                                        checkHitTag.add(random);
+                                    } while (col > 10 || col < 0 || row > 10 || row < 0);
+                                }
+                            } else {
+                                do {
+                                    do {
+                                        random = ThreadLocalRandom.current().nextInt(0, 4);
+                                        Log.i("random", String.valueOf(random));
+                                        Log.i("check", String.valueOf(checkHitTag));
+                                    } while (checkHitTag.contains(random));
+                                    if (random == 0) {
+                                        col++;
+                                    } else if (random == 1) {
+                                        col--;
+                                    } else if (random == 2) {
+                                        row++;
+                                    } else {
+                                        row--;
+                                    }
+                                    Log.i("col", String.valueOf(col));
+                                    Log.i("row", String.valueOf(row));
+                                    checkHitTag.add(random);
+                                } while (col > 10 || col < 0 || row > 10 || row < 0);
+                            }
+                        } else {
+                            row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                            col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                        }
+                    }  else {
+                        row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                        col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                    }
+                    checkHitTag = new ArrayList();
+                    tileTag = "row" + row + "col" + col;
+                    Log.i("tag", tileTag);
+
+                } while (checkHits.contains(tileTag));
+            }
 
                 checkHits.add(tileTag);
 
@@ -444,7 +564,6 @@ public class GameActivity extends AppCompatActivity {
                                         }
                 }, 1000);
 
-            }
         }
         turn = "player";
         /*Handler handler = new Handler();
@@ -505,10 +624,10 @@ public class GameActivity extends AppCompatActivity {
                     if (life != 0) {
                         fleet.get(i).setLife(life);
                         fleet.get(i).setState(1);
-                        txt = "Touché !";
+                        txt = getResources().getString(R.string.touched);
                     } else {
                         fleet.get(i).setState(2);
-                        txt = "Coulé !";
+                        txt = getResources().getString(R.string.sunk);
                         final int childCount = layout.getChildCount();
                         for (int k = 0; k < fleet.get(i).getPosition().size(); k++) {
                             for (int l = 0; l < childCount; l++) {
@@ -528,7 +647,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                     break outerloop;
                 } else {
-                    txt = "Raté !";
+                    txt = getResources().getString(R.string.missed);
                 }
             }
         }
@@ -553,6 +672,31 @@ public class GameActivity extends AppCompatActivity {
         if (flag) {
             endGame(team);
         }
+    }
+
+    /**
+     * Check result of hit
+     */
+    private String checkHit(String tag, ArrayList<Boat> fleet) {
+        String txt = null;
+        outerloop:
+        for (int i = 0; i < fleet.size(); i++) {
+            for (int j = 0; j < fleet.get(i).getPosition().size(); j++) {
+
+                if (tag.equals(String.valueOf(fleet.get(i).getPosition().get(j)))) {
+                    int life = fleet.get(i).getLife();
+                    if (life != 0) {
+                        txt = getResources().getString(R.string.touched);
+                    } else {
+                        txt = getResources().getString(R.string.sunk);
+                    }
+                    break outerloop;
+                } else {
+                    txt = getResources().getString(R.string.missed);
+                }
+            }
+        }
+        return txt;
     }
 
     /**

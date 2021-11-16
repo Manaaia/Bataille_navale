@@ -17,4 +17,13 @@
     <string name="rival">Ennemi</string>
     <string name="score">Scores</string>
     <string name="back">Retour</string>
+    <string name="won">: Gagnée</string>
+    <string name="lost">: Perdue</string>
+    <string name="game">Partie</string>
+    <string name="in">en</string>
+    <string name="counts">coups</string>
+    <string name="difficulty">Choisir la difficulté</string>
+    <string name="beginner">Débutant</string>
+    <string name="easy">Facile</string>
+    <string name="normal">Normal</string>
 </resources>

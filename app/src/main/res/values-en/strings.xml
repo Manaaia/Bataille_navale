@@ -17,4 +17,13 @@
     <string name="rival">Enemy</string>
     <string name="score">Scores</string>
     <string name="back">Back</string>
+    <string name="won"> : Won</string>
+    <string name="lost"> : Lost</string>
+    <string name="game">Game </string>
+    <string name="in"> in </string>
+    <string name="counts"> shots</string>
+    <string name="difficulty">Choose difficulty</string>
+    <string name="beginner">Beginner</string>
+    <string name="easy">Easy</string>
+    <string name="normal">Normal</string>
 </resources>

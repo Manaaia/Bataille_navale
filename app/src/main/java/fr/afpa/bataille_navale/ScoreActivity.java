@@ -20,7 +20,7 @@ public class ScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_score);
 
         ScoreMgr scoreMgr = new ScoreMgr(this);
-        scores = scoreMgr.getAll();
+        scores = scoreMgr.getAll(this);
 
         ListView list = findViewById(R.id.list);
         if(scores == null) {

@@ -249,6 +249,8 @@ public class PlacementActivity extends AppCompatActivity  {
                      */
                     if(checkFullValidityOfNewDroppedPosition(container, chunkedImages, tagView)) {
                         for(int i = 0; i < listOfPos.size(); i++) {
+                            Log.i("listSize", String.valueOf(listOfPos.size()));
+                            Log.i("listSize", String.valueOf(listOfPos));
                             String tag = String.valueOf(listOfPos.get(i));
                             int tagLength = tag.length();
                             int col;
@@ -711,9 +713,12 @@ public class PlacementActivity extends AppCompatActivity  {
             char cMainI = tagMain.charAt(7);
             int MainI = Character.getNumericValue(cMainI);
             int neighbourTileI = MainI + nextTile;
+            //Log.i("nextTile", String.valueOf(nextTile));
             String sNeighbourTileI = String.valueOf(neighbourTileI);
             String tagNeighbour = tagMain.substring(0, 7) + sNeighbourTileI;
+            //Log.i("tagNeighbour", String.valueOf(tagNeighbour));
             listOfPos.add(tagNeighbour);
+            nextTile++;
         }
         nextTile = 1;
 
