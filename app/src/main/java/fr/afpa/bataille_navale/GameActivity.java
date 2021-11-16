@@ -465,23 +465,10 @@ public class GameActivity extends AppCompatActivity {
                                     tileTag = "row" + row + "col" + col;
                                     if(checkHits.contains(tileTag) || col > 10 || col < 0 || row > 10 || row < 0) {
                                         do {
-                                            do {
-                                                random = ThreadLocalRandom.current().nextInt(0, 4);
-                                                Log.i("random", String.valueOf(random));
-                                                Log.i("check", String.valueOf(checkHitTag));
-                                            } while (checkHitTag.contains(random));
-                                            if (random == 0) {
-                                                col++;
-                                            } else if (random == 1) {
-                                                col--;
-                                            } else if (random == 2) {
-                                                row++;
-                                            } else {
-                                                row--;
-                                            }
+                                            row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                                            col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
                                             Log.i("col", String.valueOf(col));
                                             Log.i("row", String.valueOf(row));
-                                            checkHitTag.add(random);
                                         } while (col > 10 || col < 0 || row > 10 || row < 0);
                                     }
                                 } else {
