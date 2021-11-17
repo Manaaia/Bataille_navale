@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -52,6 +53,10 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(GameActivity.this,R.raw.wave2);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         boatMgr = new BoatMgr(this);
 
@@ -596,6 +601,7 @@ public class GameActivity extends AppCompatActivity {
      */
     private String fireHit(String tag, ImageView imageView, ArrayList<Boat> fleet, GridLayout layout) {
         int idImage = R.drawable.missed;
+        int sound = R.raw.missed;
         String txt = null;
 
         outerloop:
@@ -612,9 +618,11 @@ public class GameActivity extends AppCompatActivity {
                         fleet.get(i).setLife(life);
                         fleet.get(i).setState(1);
                         txt = getResources().getString(R.string.touched);
+                        sound = R.raw.explosion;
                     } else {
                         fleet.get(i).setState(2);
                         txt = getResources().getString(R.string.sunk);
+                        sound = R.raw.drowning;
                         final int childCount = layout.getChildCount();
                         for (int k = 0; k < fleet.get(i).getPosition().size(); k++) {
                             for (int l = 0; l < childCount; l++) {
@@ -635,11 +643,14 @@ public class GameActivity extends AppCompatActivity {
                     break outerloop;
                 } else {
                     txt = getResources().getString(R.string.missed);
+                    sound = R.raw.missed;
                 }
             }
         }
 
         imageView.setImageResource(idImage);
+        MediaPlayer ring= MediaPlayer.create(GameActivity.this,sound);
+        ring.start();
         return txt;
     }
 

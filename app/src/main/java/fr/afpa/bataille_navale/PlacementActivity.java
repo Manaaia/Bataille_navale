@@ -13,6 +13,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,12 +49,17 @@ public class PlacementActivity extends AppCompatActivity  {
     private Boat contreTorpilleur1;
     private Boat contreTorpilleur2;
     private Boat torpilleur;
+    private MediaPlayer mediaPlayer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placement);
+
+        mediaPlayer = MediaPlayer.create(PlacementActivity.this,R.raw.wave2);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         button = findViewById(R.id.startGameBtn);
         gridStore = findViewById(R.id.StoreShips);
@@ -241,7 +247,9 @@ public class PlacementActivity extends AppCompatActivity  {
 
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    // do nothing
+                    if (!mediaPlayer.isPlaying())
+                        mediaPlayer.reset();  // Clears mp state
+                        mediaPlayer.start();
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     /**

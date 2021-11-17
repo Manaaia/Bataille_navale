@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.wave2);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         preferences = getApplicationContext().getSharedPreferences("DiffPref", 0); // 0 - for private mode
 
