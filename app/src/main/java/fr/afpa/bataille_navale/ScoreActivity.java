@@ -14,15 +14,15 @@ import java.util.ArrayList;
 public class ScoreActivity extends AppCompatActivity {
     private ArrayList scores;
     private ArrayAdapter<String> arrayAdapter;
+    private Intent svc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(ScoreActivity.this,R.raw.wave2);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        svc = new Intent(this, BackgroundSoundService.class);
+        startService(svc);
 
         ScoreMgr scoreMgr = new ScoreMgr(this);
         scores = scoreMgr.getAll(this);
@@ -36,6 +36,23 @@ public class ScoreActivity extends AppCompatActivity {
         }
 
         list.setAdapter(arrayAdapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (svc != null) {
+            stopService(svc);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (svc != null) {
+            startService(svc);
+        }
     }
 
     /**

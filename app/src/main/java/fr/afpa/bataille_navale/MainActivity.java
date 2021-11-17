@@ -12,15 +12,15 @@ import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
+    private Intent svc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.wave2);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        svc = new Intent(this, BackgroundSoundService.class);
+        startService(svc);
 
         preferences = getApplicationContext().getSharedPreferences("DiffPref", 0); // 0 - for private mode
 
@@ -38,6 +38,23 @@ public class MainActivity extends AppCompatActivity {
             spinner.setSelection(0);
         } else {
             spinner.setSelection(preferences.getInt("level",0));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (svc != null) {
+            stopService(svc);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (svc != null) {
+            startService(svc);
         }
     }
 

@@ -49,7 +49,7 @@ public class PlacementActivity extends AppCompatActivity  {
     private Boat contreTorpilleur1;
     private Boat contreTorpilleur2;
     private Boat torpilleur;
-    private MediaPlayer mediaPlayer;
+    private Intent svc;
 
 
     @Override
@@ -57,9 +57,8 @@ public class PlacementActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placement);
 
-        mediaPlayer = MediaPlayer.create(PlacementActivity.this,R.raw.wave2);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        svc = new Intent(this, BackgroundSoundService.class);
+        startService(svc);
 
         button = findViewById(R.id.startGameBtn);
         gridStore = findViewById(R.id.StoreShips);
@@ -107,6 +106,23 @@ public class PlacementActivity extends AppCompatActivity  {
         for (int i = 0; i < childCount; i++) {
             final LinearLayout linearLayout = (LinearLayout) layout.getChildAt(i);
             linearLayout.setOnDragListener(new MyDragListener());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (svc != null) {
+            stopService(svc);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (svc != null) {
+            startService(svc);
         }
     }
 
@@ -247,9 +263,6 @@ public class PlacementActivity extends AppCompatActivity  {
 
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    if (!mediaPlayer.isPlaying())
-                        mediaPlayer.reset();  // Clears mp state
-                        mediaPlayer.start();
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     /**

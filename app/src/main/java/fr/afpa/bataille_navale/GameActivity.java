@@ -48,15 +48,16 @@ public class GameActivity extends AppCompatActivity {
     private int counter;
     private View customToastRoot;
     private TextView msg;
+    private MediaPlayer soundEffect;
+    private Intent svc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(GameActivity.this,R.raw.wave2);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        svc = new Intent(this, BackgroundSoundService.class);
+        startService(svc);
 
         boatMgr = new BoatMgr(this);
 
@@ -125,6 +126,23 @@ public class GameActivity extends AppCompatActivity {
         customToast.setDuration(Toast.LENGTH_SHORT);
         customToast.setGravity(Gravity.TOP, 0, 0);
         customToast.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (svc != null) {
+            stopService(svc);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (svc != null) {
+            startService(svc);
+        }
     }
 
     /**
@@ -649,8 +667,16 @@ public class GameActivity extends AppCompatActivity {
         }
 
         imageView.setImageResource(idImage);
-        MediaPlayer ring= MediaPlayer.create(GameActivity.this,sound);
-        ring.start();
+
+        if (soundEffect == null) {
+            soundEffect = new MediaPlayer();
+        } else {
+            soundEffect.release();
+            soundEffect = new MediaPlayer();
+        }
+        soundEffect= MediaPlayer.create(GameActivity.this,sound);
+        soundEffect.start();
+
         return txt;
     }
 
