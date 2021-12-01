@@ -169,35 +169,24 @@ public class GameActivity extends AppCompatActivity {
                 customToast.setGravity(Gravity.TOP, 0, 0);
                 customToast.show();
 
-                /*Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        msg.setText("L'ennemi attaque !");
-                        Toast customToastTurn = new Toast(getApplicationContext());
-                        customToastTurn.setView(customToastRoot);
-                        customToastTurn.setDuration(Toast.LENGTH_SHORT);
-                        customToastTurn.setGravity(Gravity.TOP, 0, 0);
-                        customToastTurn.show();
-
-                    }
-                }, 1000);*/
 
                 v.setOnClickListener(null);
                 counter++;
 
-                turn = "rival";
+                if(! txt.equals("endgame")) {
+                    turn = "rival";
 
-                Handler handler1 = new Handler();
-                handler1.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                    Handler handler1 = new Handler();
+                    handler1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-                        rivalAim(rival.getLevel());
+                            customToast.cancel();
+                            rivalAim(rival.getLevel());
 
-                    }
-                }, 1000);
+                        }
+                    }, 500);
+                }
             }
         }
     };
@@ -439,80 +428,59 @@ public class GameActivity extends AppCompatActivity {
      * calls fireHit
      */
     private void rivalAim(int level) {
-        if(turn.equals("rival")) {
-            String tileTag = null;
-            String txt = null;
-            int row = 0;
-            int col = 0;
-            int random = 0;
-            ArrayList checkHitTag = new ArrayList();
+        String tileTag = null;
+        String txt = null;
+        int row = 0;
+        int col = 0;
+        int random = 0;
+        ArrayList checkHitTag = new ArrayList();
+        Toast customToast = new Toast(getApplicationContext());
 
-            if (level == 0) {
-                do {
-                    row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
-                    col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
-                    tileTag = "row" + row + "col" + col;
-                } while (checkHits.contains(tileTag));
-            } else if(level == 1) {
-                do {
-                    if(checkHits.size() > 0) {
-                        txt = checkHit(String.valueOf(checkHits.get(checkHits.size() - 1)), myFleet);
-                        Log.i("tag-1", String.valueOf(checkHits.get(checkHits.size() - 1)));
-                        Log.i("txt", txt);
-                        if(txt.equals(getResources().getString(R.string.touched))) {
-                            String hitTag = String.valueOf(checkHits.get(checkHits.size()-1));
-                            Log.i("lastHit", hitTag);
-                            char sCol = hitTag.charAt(7);
-                            char sRow = hitTag.charAt(3);
-                            col = Character.getNumericValue(sCol);
-                            row = Character.getNumericValue(sRow);
-                            if(checkHits.size() > 1) {
-                                String txt2 = checkHit(String.valueOf(checkHits.get(checkHits.size() - 2)), myFleet);
-                                if(txt2.equals(getResources().getString(R.string.touched))) {
-                                    String hitTag2 = String.valueOf(checkHits.get(checkHits.size() - 2));
-                                    Log.i("lastHit2", hitTag2);
-                                    char sCol2 = hitTag2.charAt(7);
-                                    char sRow2 = hitTag2.charAt(3);
-                                    int col2 = Character.getNumericValue(sCol2);
-                                    int row2 = Character.getNumericValue(sRow2);
+        if (level == 0) {
+            do {
+                row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                tileTag = "row" + row + "col" + col;
+            } while (checkHits.contains(tileTag));
+        } else if(level == 1) {
+            do {
+                if(checkHits.size() > 0) {
+                    txt = checkHit(String.valueOf(checkHits.get(checkHits.size() - 1)), myFleet);
+                    Log.i("tag-1", String.valueOf(checkHits.get(checkHits.size() - 1)));
+                    Log.i("txt", txt);
+                    if(txt.equals(getResources().getString(R.string.touched))) {
+                        String hitTag = String.valueOf(checkHits.get(checkHits.size()-1));
+                        Log.i("lastHit", hitTag);
+                        char sCol = hitTag.charAt(7);
+                        char sRow = hitTag.charAt(3);
+                        col = Character.getNumericValue(sCol);
+                        row = Character.getNumericValue(sRow);
+                        if(checkHits.size() > 1) {
+                            String txt2 = checkHit(String.valueOf(checkHits.get(checkHits.size() - 2)), myFleet);
+                            if(txt2.equals(getResources().getString(R.string.touched))) {
+                                String hitTag2 = String.valueOf(checkHits.get(checkHits.size() - 2));
+                                Log.i("lastHit2", hitTag2);
+                                char sCol2 = hitTag2.charAt(7);
+                                char sRow2 = hitTag2.charAt(3);
+                                int col2 = Character.getNumericValue(sCol2);
+                                int row2 = Character.getNumericValue(sRow2);
 
-                                    if (col - col2 == 1) {
-                                        col++;
-                                    } else if (col - col2 == -1) {
-                                        col--;
-                                    } else if (row - row2 == 1) {
-                                        row++;
-                                    } else if (row - row2 == -1) {
-                                        row--;
-                                    }
-                                    tileTag = "row" + row + "col" + col;
-                                    if(checkHits.contains(tileTag) || col > 10 || col < 0 || row > 10 || row < 0) {
-                                        do {
-                                            row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
-                                            col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
-                                            Log.i("col", String.valueOf(col));
-                                            Log.i("row", String.valueOf(row));
-                                        } while (col > 10 || col < 0 || row > 10 || row < 0);
-                                    }
-                                } else {
+                                if (col - col2 == 1) {
+                                    col++;
+                                } else if (col - col2 == -1) {
+                                    col--;
+                                } else if (row - row2 == 1) {
+                                    row++;
+                                } else if (row - row2 == -1) {
+                                    row--;
+                                }
+                                tileTag = "row" + row + "col" + col;
+                                if(checkHits.contains(tileTag) || col > 10 || col < 0 || row > 10 || row < 0) {
                                     do {
-                                        do {
-                                            random = ThreadLocalRandom.current().nextInt(0, 4);
-                                            Log.i("random", String.valueOf(random));
-                                            Log.i("check", String.valueOf(checkHitTag));
-                                        } while (checkHitTag.contains(random));
-                                        if (random == 0) {
-                                            col++;
-                                        } else if (random == 1) {
-                                            col--;
-                                        } else if (random == 2) {
-                                            row++;
-                                        } else {
-                                            row--;
-                                        }
+                                        row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                                        col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
                                         Log.i("col", String.valueOf(col));
                                         Log.i("row", String.valueOf(row));
-                                        checkHitTag.add(random);
                                     } while (col > 10 || col < 0 || row > 10 || row < 0);
                                 }
                             } else {
@@ -537,44 +505,66 @@ public class GameActivity extends AppCompatActivity {
                                 } while (col > 10 || col < 0 || row > 10 || row < 0);
                             }
                         } else {
-                            row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
-                            col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                            do {
+                                do {
+                                    random = ThreadLocalRandom.current().nextInt(0, 4);
+                                    Log.i("random", String.valueOf(random));
+                                    Log.i("check", String.valueOf(checkHitTag));
+                                } while (checkHitTag.contains(random));
+                                if (random == 0) {
+                                    col++;
+                                } else if (random == 1) {
+                                    col--;
+                                } else if (random == 2) {
+                                    row++;
+                                } else {
+                                    row--;
+                                }
+                                Log.i("col", String.valueOf(col));
+                                Log.i("row", String.valueOf(row));
+                                checkHitTag.add(random);
+                            } while (col > 10 || col < 0 || row > 10 || row < 0);
                         }
-                    }  else {
+                    } else {
                         row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
                         col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
                     }
-                    checkHitTag = new ArrayList();
-                    tileTag = "row" + row + "col" + col;
-                    Log.i("tag", tileTag);
+                }  else {
+                    row = ThreadLocalRandom.current().nextInt(0, Board.ROWS);
+                    col = ThreadLocalRandom.current().nextInt(0, Board.COLUMNS);
+                }
+                checkHitTag = new ArrayList();
+                tileTag = "row" + row + "col" + col;
+                Log.i("tag", tileTag);
 
-                } while (checkHits.contains(tileTag));
-            }
-
-                checkHits.add(tileTag);
-
-                LinearLayout linearLayout = (LinearLayout) getViewByTag(tileTag);
-                FrameLayout frameLayout = (FrameLayout) linearLayout.getChildAt(0);
-                ImageView imageView = (ImageView) frameLayout.getChildAt(1);
-
-                final String tag = tileTag;
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String txt = fireHit(tag, imageView, myFleet, myLayout);
-                        String team = getResources().getString(R.string.rival);
-                        msg.setText(team + " : " + txt);
-                        Toast customToast = new Toast(getApplicationContext());
-                        customToast.setView(customToastRoot);
-                        customToast.setDuration(Toast.LENGTH_SHORT);
-                        customToast.setGravity(Gravity.TOP, 0, 0);
-                        customToast.show();
-                                        }
-                }, 1000);
-
+            } while (checkHits.contains(tileTag));
         }
+
+            checkHits.add(tileTag);
+
+            LinearLayout linearLayout = (LinearLayout) getViewByTag(tileTag);
+            FrameLayout frameLayout = (FrameLayout) linearLayout.getChildAt(0);
+            ImageView imageView = (ImageView) frameLayout.getChildAt(1);
+
+            final String tag = tileTag;
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String txt = fireHit(tag, imageView, myFleet, myLayout);
+                    String team = getResources().getString(R.string.rival);
+                    msg.setText(team + " : " + txt);
+
+                    customToast.setView(customToastRoot);
+                    customToast.setDuration(Toast.LENGTH_SHORT);
+                    customToast.setGravity(Gravity.TOP, 0, 0);
+                    customToast.show();
+                                    }
+            }, 500);
+
+        customToast.cancel();
         turn = "player";
         /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -656,7 +646,10 @@ public class GameActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        checkForEndGame(fleet);
+                        boolean flag = checkForEndGame(fleet);
+                        if(flag) {
+                            txt = "endgame";
+                        }
                     }
                     break outerloop;
                 } else {
@@ -683,7 +676,7 @@ public class GameActivity extends AppCompatActivity {
     /**
      * Check if all boat of team are sunk
      */
-    private void checkForEndGame(ArrayList<Boat> fleet) {
+    private boolean checkForEndGame(ArrayList<Boat> fleet) {
         boolean flag = true;
         String team = fleet.get(0).getTeam();
 
@@ -696,6 +689,7 @@ public class GameActivity extends AppCompatActivity {
         if (flag) {
             endGame(team);
         }
+        return flag;
     }
 
     /**
